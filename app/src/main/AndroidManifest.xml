@@ -14,7 +14,10 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyDc2hPvgC0kuDBIoTpaCvBy0LksIdpUvjw"/>
-
+        <activity android:name=".CardviewActivity"></activity>
+        <activity android:name=".CreateActivity"></activity>
+        <activity android:name=".UpdateActivity"></activity>
+<activity android:name=".ListActivity"></activity>
         <activity
                 android:name=".MainViewActivity"
                 android:label="@string/title_activity_main_view">
