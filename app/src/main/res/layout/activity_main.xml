@@ -70,6 +70,9 @@
             android:background="@drawable/round_bg"
             android:layout_below="@id/login_with_email"
             android:textColor="#FFFF"
+            android:drawableStart="@drawable/ic_iconmonstr_facebook_5"
+            android:drawableLeft="@drawable/ic_iconmonstr_facebook_5"
+
     />
     <Button
             android:id="@+id/login_with_twitter"
@@ -83,7 +86,9 @@
             android:background="@drawable/round_bg"
             android:layout_below="@id/login_with_facebook"
             android:textColor="#FFFF"
-            android:drawableStart="@drawable/ic_twitter_logo"
+            android:drawableLeft="@drawable/ic_iconmonstr_twitter_5"
+            android:drawableStart="@drawable/ic_iconmonstr_twitter_5"
+
     />
     <Button
             android:id="@+id/login_with_google"
