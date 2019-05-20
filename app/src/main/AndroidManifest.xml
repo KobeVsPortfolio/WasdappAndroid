@@ -13,7 +13,7 @@
             android:theme="@style/AppTheme">
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyDWae7ESNh6GfuvLfsLmGD1SoKFZSCaizM"/>
+                android:value="AIzaSyDc2hPvgC0kuDBIoTpaCvBy0LksIdpUvjw"/>
         <activity android:name=".CardviewActivity"></activity>
         <activity android:name=".CreateActivity"></activity>
         <activity android:name=".UpdateActivity"></activity>
