@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.wasdappapp">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -11,6 +12,19 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity
+                android:name=".CardviewActivity"
+                android:label="@string/title_activity_cardview">
+        </activity>
+        <activity
+                android:name=".ListActivity"
+                android:label="@string/title_activity_list">
+        </activity>
+        <activity android:name=".UpdateActivity">
+        </activity>
+        <activity android:name=".CreateActivity">
+        </activity>
+
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyDWae7ESNh6GfuvLfsLmGD1SoKFZSCaizM"/>
@@ -29,7 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

@@ -6,19 +6,23 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainViewActivity"
-        android:background="@color/colorPrimary">
+        tools:context=".ListActivity">
+
 
 
     <android.support.design.widget.BottomNavigationView
             android:id="@+id/nav_view"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="0dp"
             android:background="?android:attr/windowBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_nav_menu"
-            app:layout_constraintHorizontal_bias="0.0">
-    </android.support.design.widget.BottomNavigationView>
+            app:menu="@menu/bottom_nav_menu"/>
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="395dp"
+            android:layout_height="659dp" tools:layout_editor_absoluteY="8dp" tools:layout_editor_absoluteX="8dp"/>
+
 </android.support.constraint.ConstraintLayout>
