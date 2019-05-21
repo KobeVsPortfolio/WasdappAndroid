@@ -15,24 +15,24 @@ class AccountActivity : AppCompatActivity() {
 
         val navigationView = findViewById<View>(R.id.nav_view_account) as BottomNavigationView
 
-        navigationView.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId){
-                R.id.navigation_home ->
-                    startActivity(Intent(this, MainViewActivity::class.java))
-            }
-            when(item.itemId){
-                R.id.navigation_list ->
-                    startActivity(Intent(this, ListActivity::class.java))
-            }
-            when(item.itemId){
-                R.id.navigation_qr_code ->
-                    startActivity(Intent(this, QrActivity::class.java))
-            }
-            when(item.itemId){
-                R.id.navigation_account ->
-                    startActivity(Intent(this, AccountActivity::class.java))
-            }
-            true
+            navigationView.setOnNavigationItemSelectedListener { item ->
+                when(item.itemId){
+                    R.id.navigation_home ->
+                        startActivity(Intent(this, MainViewActivity::class.java))
+                }
+                when(item.itemId){
+                    R.id.navigation_list ->
+                        startActivity(Intent(this, ListActivity::class.java))
+                }
+                when(item.itemId){
+                    R.id.navigation_qr_code ->
+                        startActivity(Intent(this, QrActivity::class.java))
+                }
+                when(item.itemId){
+                    R.id.navigation_account ->
+                        startActivity(Intent(this, AccountActivity::class.java))
+                }
+                true
         }
     }
     }
