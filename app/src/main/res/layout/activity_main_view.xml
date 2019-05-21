@@ -19,9 +19,9 @@
               android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <android.support.design.widget.BottomNavigationView
-            android:id="@+id/nav_view"
+            android:id="@+id/nav_view_main_view"
             android:layout_width="0dp"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:background="?android:attr/windowBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

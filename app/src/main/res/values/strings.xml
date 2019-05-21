@@ -2,8 +2,9 @@
     <string name="app_name">Wasdapp</string>
     <string name="title_activity_main_view">MainViewActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_list">List</string>
+    <string name="title_qr_code">QR-Code</string>
+    <string name="title_account">Account</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="title_activity_cardview">CardviewActivity</string>
