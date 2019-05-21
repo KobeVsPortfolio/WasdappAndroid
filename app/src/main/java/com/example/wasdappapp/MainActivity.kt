@@ -13,7 +13,8 @@ class MainActivity : AppCompatActivity() {
 
 
         login_with_email.setOnClickListener {
-            startActivity(Intent(this, CreateActivity::class.java))
+            startActivity(Intent(this, MainViewActivity::class.java))
+            finish()
         }
 
     }

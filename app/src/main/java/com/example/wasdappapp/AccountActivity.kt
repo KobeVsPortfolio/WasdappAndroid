@@ -7,15 +7,13 @@ import android.support.design.widget.BottomNavigationView
 import android.view.View
 import android.widget.TextView
 
-class UpdateActivity : AppCompatActivity() {
-
-
+class AccountActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_update)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view_update)
-        val navigationView = findViewById<View>(R.id.nav_view_update) as BottomNavigationView
+        setContentView(R.layout.activity_account)
+
+        val navigationView = findViewById<View>(R.id.nav_view_account) as BottomNavigationView
 
         navigationView.setOnNavigationItemSelectedListener { item ->
             when(item.itemId){
@@ -34,10 +32,8 @@ class UpdateActivity : AppCompatActivity() {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
-
             true
-
         }
+    }
+    }
 
-         }
-}

@@ -1,36 +1,43 @@
 package com.example.wasdappapp
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.view.View
 import android.widget.TextView
 
 class CreateActivity : AppCompatActivity() {
 
-    private lateinit var textMessage: TextView
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                textMessage.setText(R.string.title_home)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_dashboard -> {
-                textMessage.setText(R.string.title_dashboard)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-                textMessage.setText(R.string.title_notifications)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        val navigationView = findViewById<View>(R.id.nav_view_create) as BottomNavigationView
+
+        navigationView.setOnNavigationItemSelectedListener { item ->
+            when(item.itemId){
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when(item.itemId){
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when(item.itemId){
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when(item.itemId){
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
+            }
+
+            true
+
+        }
     }
 }
+
+
