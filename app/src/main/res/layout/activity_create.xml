@@ -30,7 +30,7 @@
                     android:id="@+id/create"
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
-                    android:text="Create"
+                    android:text="@string/create"
                     android:textSize="40dp"
                     android:textStyle="bold"
                     android:textColor="@color/colorAccent"
@@ -55,6 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/text"
+                    android:maxLength="32"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
@@ -64,6 +65,7 @@
             />
             <EditText
                     android:id="@+id/location"
+                    android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/name"
@@ -76,6 +78,7 @@
             />
             <EditText
                     android:id="@+id/street_name"
+                    android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/location"
@@ -88,6 +91,7 @@
             />
             <EditText
                     android:id="@+id/house_number"
+                    android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/street_name"
@@ -102,6 +106,7 @@
             />
             <EditText
                     android:id="@+id/postal_code"
+                    android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/house_number"
@@ -116,6 +121,7 @@
             />
             <EditText
                     android:id="@+id/town"
+                    android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/postal_code"
@@ -128,6 +134,7 @@
             />
             <EditText
                     android:id="@+id/country"
+                    android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/town"
@@ -142,16 +149,19 @@
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:maxLength="238"
                     android:layout_below="@id/country"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
+                    android:padding="5dp"
                     android:background="@drawable/round_bg"
                     android:hint="Description"
                     android:gravity="center"
             />
             <EditText
                     android:id="@+id/telephone"
+                    android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/description"
@@ -164,6 +174,7 @@
             />
             <EditText
                     android:id="@+id/email"
+                    android:maxLength="36"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/telephone"

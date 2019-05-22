@@ -3,15 +3,14 @@ package com.example.wasdappapp
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.widget.EditText
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_update.*
 import kotlinx.android.synthetic.main.activity_update.nav_view
 import model.SortModel
 
 class UpdateActivity : AppCompatActivity() {
 
-
+    val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,20 +31,20 @@ class UpdateActivity : AppCompatActivity() {
         location_update.setText(wasdappobj.locatie)
 
         nav_view.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
 
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_list ->
                     startActivity(Intent(this, ListActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_qr_code ->
                     startActivity(Intent(this, QrActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
@@ -54,9 +53,18 @@ class UpdateActivity : AppCompatActivity() {
 
         }
         cancel_button.setOnClickListener {
-        startActivity(Intent(this, ListActivity::class.java))
-        finish()
-}
+            startActivity(Intent(this, ListActivity::class.java))
+            finish()
+        }
 
-         }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }

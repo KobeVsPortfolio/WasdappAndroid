@@ -16,6 +16,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
@@ -65,6 +67,8 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+    val auth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_this_object)
@@ -88,19 +92,19 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         nav_view.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_list ->
                     startActivity(Intent(this, ListActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_qr_code ->
                     startActivity(Intent(this, QrActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
@@ -112,6 +116,15 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             intent.putExtra("wasdappobj" , wasdappobj)
             startActivity(intent)
             finish()
+        }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }
