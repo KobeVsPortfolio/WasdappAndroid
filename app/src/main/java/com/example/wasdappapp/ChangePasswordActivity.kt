@@ -46,7 +46,6 @@ class ChangePasswordActivity : AppCompatActivity() {
 
             }
             true
-
         }
     }
     private fun changePassword(){
