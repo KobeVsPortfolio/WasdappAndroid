@@ -11,9 +11,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         login_with_email.setOnClickListener {
-            startActivity(Intent(this, CreateActivity::class.java))
+            startActivity(Intent(this, MainViewActivity::class.java))
+            finish()
+        }
+        sign_up.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+            finish()
         }
 
     }

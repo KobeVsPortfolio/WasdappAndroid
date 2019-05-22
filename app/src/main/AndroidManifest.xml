@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.wasdappapp">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.hardware.camera"/>
+    <uses-permission android:name="android.permission.LOCATION_HARDWARE.autofocus"/>
 
     <application
             android:allowBackup="true"
@@ -11,13 +16,23 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".ChangePasswordActivity">
+        </activity>
+        <activity android:name=".SignUpActivity">
+        </activity>
+
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyDWae7ESNh6GfuvLfsLmGD1SoKFZSCaizM"/>
-        <activity android:name=".CardviewActivity"></activity>
-        <activity android:name=".CreateActivity"></activity>
-        <activity android:name=".UpdateActivity"></activity>
-<activity android:name=".ListActivity"></activity>
+                android:value="AIzaSyDc2hPvgC0kuDBIoTpaCvBy0LksIdpUvjw"/>
+
+        <activity android:name=".ThisObjectActivity">
+        </activity>
+        <activity android:name=".CardviewActivity"/>
+        <activity android:name=".CreateActivity"/>
+        <activity android:name=".UpdateActivity"/>
+        <activity android:name=".QrActivity"/>
+        <activity android:name=".AccountActivity"/>
+        <activity android:name=".ListActivity"/>
         <activity
                 android:name=".MainViewActivity"
                 android:label="@string/title_activity_main_view">
@@ -32,7 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
