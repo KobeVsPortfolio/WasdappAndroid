@@ -41,6 +41,10 @@ class CreateActivity : AppCompatActivity() {
             true
 
         }
+    cancel_button2.setOnClickListener {
+       startActivity(Intent(this, ListActivity::class.java))
+        finish()
+    }
     }
 
     public override fun onStart() {
