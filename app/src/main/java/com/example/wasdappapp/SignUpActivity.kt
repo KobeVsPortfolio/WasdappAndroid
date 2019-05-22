@@ -11,6 +11,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+
     cancel_sign_up.setOnClickListener {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
