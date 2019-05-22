@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "410436301128",
+    "firebase_url": "https://wasdapp-137af.firebaseio.com",
+    "project_id": "wasdapp-137af",
+    "storage_bucket": "wasdapp-137af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:410436301128:android:165e7851e4c1caf1",
+        "android_client_info": {
+          "package_name": "com.example.wasdappapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410436301128-ritcpup5m880ajk096hmcspstpv8dd6e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wasdappapp",
+            "certificate_hash": "48fa34329df58d30233e1f94120027b508cba3af"
+          }
+        },
+        {
+          "client_id": "410436301128-co23g0dsvc9ha6gpvnnc01rmqpdfotm5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.wasdappapp",
+            "certificate_hash": "75ccacc313d6a81868755f0e64e291e517cad2f4"
+          }
+        },
+        {
+          "client_id": "410436301128-gb2mvmm5k8eqgte4moeo9jngamoh48m7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtb14iV3dMRMa1-CiSCJPD0JPxZM-5PLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "410436301128-vhef17f70e4gmd7vo2i29j4jbjs5jng9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
