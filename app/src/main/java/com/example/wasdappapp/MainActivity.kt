@@ -16,6 +16,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, MainViewActivity::class.java))
             finish()
         }
+        sign_up.setOnClickListener {
+            startActivity(Intent(this, SignUpActivity::class.java))
+            finish()
+        }
 
     }
 }
