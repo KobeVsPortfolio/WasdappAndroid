@@ -21,10 +21,11 @@ class SortsListAdapter (private val list:ArrayList<SortModel>, private val conte
             objectName.text = s.name
 
             var objectLocation: TextView = itemView.findViewById(R.id.location_of_object) as TextView
-            objectLocation.text = s.location
+            objectLocation.text = s.gemeente
 
             itemView.setOnClickListener {
                 val intent = Intent(context, ThisObjectActivity::class.java)
+                intent.putExtra("wasdappobj", s)
                 context.startActivity(intent)
             }
         }
