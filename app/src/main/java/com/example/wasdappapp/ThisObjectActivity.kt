@@ -8,6 +8,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
+import model.SortModel
 
 class ThisObjectActivity : AppCompatActivity() {
 
@@ -15,6 +16,21 @@ class ThisObjectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_this_object)
         nav_view.selectedItemId = R.id.navigation_list
+
+        var wasdappobj = intent.getParcelableExtra("wasdappobj") as SortModel
+
+        name_of_this_object.text = wasdappobj.name
+        location_of_this_object.text = wasdappobj.locatie
+        house_number_of_this_object.text = wasdappobj.nummer
+        postal_code_of_this_object.text = wasdappobj.postCode
+        town_of_this_object.text = wasdappobj.gemeente
+        country_of_this_object.text = wasdappobj.land
+        description_of_this_object.text = wasdappobj.omschrijving
+        telephone_of_this_object.text = wasdappobj.telefoonNummer
+        email_of_this_object.text = wasdappobj.email
+        location_of_this_object.text = wasdappobj.locatie
+
+
 
         nav_view.setOnNavigationItemSelectedListener { item ->
             when(item.itemId){
@@ -36,7 +52,10 @@ class ThisObjectActivity : AppCompatActivity() {
             true
         }
         update_object_button.setOnClickListener {
-            startActivity(Intent(this, UpdateActivity::class.java))
+            val intent = Intent(this, UpdateActivity::class.java)
+
+            intent.putExtra("wasdappobj" , wasdappobj)
+            startActivity(intent)
             finish()
         }
     }
