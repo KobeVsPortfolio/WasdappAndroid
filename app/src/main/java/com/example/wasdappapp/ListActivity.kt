@@ -17,7 +17,6 @@ import model.SortModel
 
 class ListActivity : AppCompatActivity() {
     private var adapter: SortsListAdapter? = null
-    //private var sortList: ArrayList<SortModel>?=null
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,17 +52,8 @@ class ListActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     for (document in task.result!!) {
-                        var sortModel = SortModel()
-                        var naam = document.data["name"] as String
-                        //var locatie = document.data["locatie"] as String
-
-                        sortModel.name = naam
-                        // sortModel.location = locatie
-                        println("binnen loop= " + document.data)
-                        sortList.add(sortModel)
+                        sortList.add(document.toObject(SortModel::class.java))
                     }
-                    println("Volledige list :" + sortList.toString())
-
                     layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
                     adapter = SortsListAdapter(sortList!!, this)
 
