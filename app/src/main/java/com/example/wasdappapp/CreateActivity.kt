@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.view.View
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_create.*
+import kotlinx.android.synthetic.main.activity_create.nav_view
 
 class CreateActivity : AppCompatActivity() {
 
@@ -14,10 +16,9 @@ class CreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+        nav_view.selectedItemId = R.id.navigation_list
 
-        val navigationView = findViewById<View>(R.id.nav_view_create) as BottomNavigationView
-
-        navigationView.setOnNavigationItemSelectedListener { item ->
+        nav_view.setOnNavigationItemSelectedListener { item ->
             when(item.itemId){
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))

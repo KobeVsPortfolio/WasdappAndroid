@@ -7,8 +7,6 @@
         android:layout_height="match_parent"
         tools:context=".AccountActivity"
         android:background="@color/colorPrimary">
-
-
     <ImageView
             android:layout_width="154dp"
             android:layout_height="147dp"
@@ -76,7 +74,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     <android.support.design.widget.BottomNavigationView
-            android:id="@+id/nav_view_account"
+            android:id="@+id/nav_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?android:attr/windowBackground"
@@ -84,5 +82,4 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:menu="@menu/bottom_nav_menu"/>
-
 </android.support.constraint.ConstraintLayout>

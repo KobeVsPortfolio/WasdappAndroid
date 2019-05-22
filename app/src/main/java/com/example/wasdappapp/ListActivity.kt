@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import data.SortsListAdapter
+import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.activity_list.nav_view
 import model.SortModel
 
 class ListActivity : AppCompatActivity() {
@@ -20,10 +22,10 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
+        nav_view.selectedItemId = R.id.navigation_list
 
-        val navigationView = findViewById<View>(R.id.nav_view_list) as BottomNavigationView
 
-        navigationView.setOnNavigationItemSelectedListener { item ->
+        nav_view.setOnNavigationItemSelectedListener { item ->
             when(item.itemId){
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))

@@ -6,16 +6,16 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.view.View
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_account.*
 
 class AccountActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
+        nav_view.selectedItemId = R.id.navigation_account
 
-        val navigationView = findViewById<View>(R.id.nav_view_account) as BottomNavigationView
-
-            navigationView.setOnNavigationItemSelectedListener { item ->
+            nav_view.setOnNavigationItemSelectedListener { item ->
                 when(item.itemId){
                     R.id.navigation_home ->
                         startActivity(Intent(this, MainViewActivity::class.java))
@@ -31,9 +31,11 @@ class AccountActivity : AppCompatActivity() {
                 when(item.itemId){
                     R.id.navigation_account ->
                         startActivity(Intent(this, AccountActivity::class.java))
+
                 }
                 true
-        }
+
+            }
     }
     }
 

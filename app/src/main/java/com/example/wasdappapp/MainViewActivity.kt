@@ -19,6 +19,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_account.*
+import kotlinx.android.synthetic.main.activity_main_view.*
+import kotlinx.android.synthetic.main.activity_main_view.nav_view
 import java.io.IOException
 
 class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -101,10 +104,10 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
 override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
+    nav_view.selectedItemId = R.id.navigation_home
 
-        val navigationView = findViewById<View>(R.id.nav_view_main_view) as BottomNavigationView
 
-        navigationView.setOnNavigationItemSelectedListener { item ->
+        nav_view.setOnNavigationItemSelectedListener { item ->
             when(item.itemId){
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))

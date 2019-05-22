@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.view.View
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_account.*
+import kotlinx.android.synthetic.main.activity_update.*
+import kotlinx.android.synthetic.main.activity_update.nav_view
 
 class UpdateActivity : AppCompatActivity() {
 
@@ -14,13 +17,14 @@ class UpdateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view_update)
-        val navigationView = findViewById<View>(R.id.nav_view_update) as BottomNavigationView
+        nav_view.selectedItemId = R.id.navigation_list
 
-        navigationView.setOnNavigationItemSelectedListener { item ->
+
+        nav_view.setOnNavigationItemSelectedListener { item ->
             when(item.itemId){
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
+
             }
             when(item.itemId){
                 R.id.navigation_list ->
@@ -38,6 +42,10 @@ class UpdateActivity : AppCompatActivity() {
             true
 
         }
+        cancel_button.setOnClickListener {
+        startActivity(Intent(this, ListActivity::class.java))
+        finish()
+}
 
          }
 }
