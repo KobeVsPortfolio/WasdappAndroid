@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import data.SortsListAdapter
 import kotlinx.android.synthetic.main.activity_account.*
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_list.nav_view
 import model.SortModel
 
 class ListActivity : AppCompatActivity() {
+    val auth = FirebaseAuth.getInstance()
     private var adapter: SortsListAdapter? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
 
@@ -66,6 +68,15 @@ class ListActivity : AppCompatActivity() {
         add_new_object_button.setOnClickListener {
             startActivity(Intent(this, CreateActivity::class.java))
             finish()
+        }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }

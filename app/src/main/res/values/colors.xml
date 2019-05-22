@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#272C31</color>
     <color name="colorAccent">#404449</color>
     <color name="colorAccent2">#FFFFFF</color>
+    <color name ="colorWarning">#C80500</color>
     <color name="facebook">#2E4186</color>
     <color name="twitter">#4A8BC3</color>
     <color name="google">#B22D25</color>

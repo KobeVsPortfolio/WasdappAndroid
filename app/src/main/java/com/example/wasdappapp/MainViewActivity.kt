@@ -19,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.android.synthetic.main.activity_main_view.nav_view
@@ -28,6 +29,7 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    val auth = FirebaseAuth.getInstance()
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -35,16 +37,17 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
+
     private fun setUpMap() {
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(
             MarkerOptions()
                 .position(sydney)
-                .title("Marker in Sydney"))
+                .title("Marker in Sydney")
+        )
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -67,8 +70,7 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        mMap.setOnMapClickListener {
-                location ->
+        mMap.setOnMapClickListener { location ->
             placeMarkerOnMap(location)
         }
     }
@@ -80,14 +82,17 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         val address: Address?
         var addressText = ""
         try {// Asks the geocoder to get the address from the location passed to the method.
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)// If the response contains any address, then append it to a string and return.
+            addresses = geocoder.getFromLocation(
+                latLng.latitude,
+                latLng.longitude,
+                1
+            )// If the response contains any address, then append it to a string and return.
             if (null != addresses && !addresses.isEmpty()) {
                 address = addresses[0]
                 addressText = address.getAddressLine(0)
             }
-        } catch (e: IOException)
-        {
-            Toast.makeText(this,"Not correct", Toast.LENGTH_LONG).show()
+        } catch (e: IOException) {
+            Toast.makeText(this, "Not correct", Toast.LENGTH_LONG).show()
 
         }
         return addressText
@@ -97,30 +102,30 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         val markerOptions = MarkerOptions().position(location)
         val titleStr = getAddress(location)  // add these two lines
         markerOptions.title(titleStr)
-        mMap.addMarker(markerOptions)}
+        mMap.addMarker(markerOptions)
+    }
 
 
-
-override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
-    nav_view.selectedItemId = R.id.navigation_home
+        nav_view.selectedItemId = R.id.navigation_home
 
 
         nav_view.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_list ->
                     startActivity(Intent(this, ListActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_qr_code ->
                     startActivity(Intent(this, QrActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
@@ -131,5 +136,14 @@ override fun onCreate(savedInstanceState: Bundle?) {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
