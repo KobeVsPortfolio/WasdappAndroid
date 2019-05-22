@@ -5,17 +5,15 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.view.View
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_account.*
-import kotlinx.android.synthetic.main.activity_create.*
-import kotlinx.android.synthetic.main.activity_create.nav_view
+import kotlinx.android.synthetic.main.activity_this_object.*
+import kotlinx.android.synthetic.main.activity_this_object.nav_view
 
-class CreateActivity : AppCompatActivity() {
-
+class ThisObjectActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create)
+        setContentView(R.layout.activity_this_object)
         nav_view.selectedItemId = R.id.navigation_list
 
         nav_view.setOnNavigationItemSelectedListener { item ->
@@ -35,11 +33,11 @@ class CreateActivity : AppCompatActivity() {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
-
             true
-
+        }
+        update_object_button.setOnClickListener {
+            startActivity(Intent(this, UpdateActivity::class.java))
+            finish()
         }
     }
 }
-
-

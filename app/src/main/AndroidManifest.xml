@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.wasdappapp">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -14,13 +15,14 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyDc2hPvgC0kuDBIoTpaCvBy0LksIdpUvjw"/>
-
-        <activity android:name=".CardviewActivity"></activity>
-        <activity android:name=".CreateActivity"></activity>
-        <activity android:name=".UpdateActivity"></activity>
-        <activity android:name=".QrActivity"></activity>
-        <activity android:name=".AccountActivity"></activity>
-        <activity android:name=".ListActivity"></activity>
+        <activity android:name=".ThisObjectActivity">
+        </activity>
+        <activity android:name=".CardviewActivity"/>
+        <activity android:name=".CreateActivity"/>
+        <activity android:name=".UpdateActivity"/>
+        <activity android:name=".QrActivity"/>
+        <activity android:name=".AccountActivity"/>
+        <activity android:name=".ListActivity"/>
         <activity
                 android:name=".MainViewActivity"
                 android:label="@string/title_activity_main_view">
@@ -35,7 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
