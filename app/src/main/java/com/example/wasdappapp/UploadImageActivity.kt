@@ -1,11 +1,12 @@
 package com.example.wasdappapp
 
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import java.io.File
-import java.util.Base64
+import java.util.*
 
 class UploadImageActivity : AppCompatActivity() {
 
@@ -21,7 +22,7 @@ class UploadImageActivity : AppCompatActivity() {
         /*
            Decoder Base4 to File/Image
          */
-        decoder(base64ImageString, "C:\\base64\\decoderimage.png")
+       // decoder(base64ImageString, "C:\\base64\\decoderimage.png")
 
         println("DONE!")
     }
@@ -33,9 +34,6 @@ class UploadImageActivity : AppCompatActivity() {
         return base64
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun decoder(base64Str: String, pathFile: String): Unit{
-        val imageByteArray = Base64.getDecoder().decode(base64Str)
-        File(pathFile).writeBytes(imageByteArray)
-    }
+
+
 }

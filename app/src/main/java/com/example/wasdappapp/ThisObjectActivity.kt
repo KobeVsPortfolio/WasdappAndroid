@@ -1,10 +1,15 @@
 package com.example.wasdappapp
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.RequiresApi
+import android.util.Base64
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -16,7 +21,9 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
 import model.WasdappEntry
+import java.io.File
 import java.io.IOException
+import java.util.*
 
 class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -65,6 +72,7 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
     val auth = FirebaseAuth.getInstance()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_this_object)
@@ -82,6 +90,8 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         telephone_of_this_object.text = wasdappobj.telefoonNummer
         email_of_this_object.text = wasdappobj.email
         location_of_this_object.text = wasdappobj.locatie
+        photo_this_object.setImageBitmap(decoder(wasdappobj.image!!))
+
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -121,5 +131,11 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    fun decoder(base64Str: String): Bitmap{
+        val imageBytes = Base64.decode(base64Str, 0)
+        val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        return image
     }
 }
