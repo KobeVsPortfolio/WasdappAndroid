@@ -7,16 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import com.example.wasdappapp.R
 import com.example.wasdappapp.ThisObjectActivity
-import model.SortModel
+import model.WasdappEntry
 
-class SortsListAdapter (private val list:ArrayList<SortModel>, private val context: Context)
+class SortsListAdapter (private val list:ArrayList<WasdappEntry>, private val context: Context)
     : RecyclerView.Adapter<SortsListAdapter.ViewHolder>() {
 
     inner class ViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bindItem(s: SortModel) {
+        fun bindItem(s: WasdappEntry) {
             var objectName: TextView = itemView.findViewById(R.id.name_of_object) as TextView
             objectName.text = s.name
 
