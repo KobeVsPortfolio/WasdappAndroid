@@ -23,7 +23,7 @@ class UpdateActivity : AppCompatActivity() {
         setContentView(R.layout.activity_update)
         nav_view.selectedItemId = R.id.navigation_list
 
-        var wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
+        val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         name_update.setText(wasdappobj.name)
         location_update.setText(wasdappobj.locatie)
@@ -64,7 +64,7 @@ class UpdateActivity : AppCompatActivity() {
         }
 
         update_button.setOnClickListener {
-            updateEntry(wasdappobj.id)
+            updateEntry(wasdappobj)
         }
 
     }
@@ -78,8 +78,7 @@ class UpdateActivity : AppCompatActivity() {
         }
     }
 
-    fun updateEntry(id : Long?) {
-        val entry = WasdappEntry()
+    fun updateEntry(entry : WasdappEntry) {
         entry.name = name_update.text.toString()
         entry.locatie = location_update.text.toString()
         entry.straat = street_name_update.text.toString()
@@ -92,9 +91,9 @@ class UpdateActivity : AppCompatActivity() {
         entry.email = email_update.text.toString()
         entry.wijzigDatum = Calendar.getInstance().time
 
-        collection.document("${id}").get().addOnCompleteListener {
+        collection.document("${entry.id}").get().addOnCompleteListener {
             if (it.result!!.exists()) {
-                collection.document("${id}").set(entry)
+                collection.document("${entry.id}").set(entry)
                 val intent = Intent(this, ListActivity::class.java)
                 startActivity(intent)
             } else {
