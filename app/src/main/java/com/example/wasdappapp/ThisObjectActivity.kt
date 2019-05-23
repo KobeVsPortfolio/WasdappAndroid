@@ -3,14 +3,10 @@ package com.example.wasdappapp
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.view.View
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
-import model.SortModel
+import model.WasdappEntry
 
 class ThisObjectActivity : AppCompatActivity() {
 
@@ -21,7 +17,7 @@ class ThisObjectActivity : AppCompatActivity() {
         setContentView(R.layout.activity_this_object)
         nav_view.selectedItemId = R.id.navigation_list
 
-        var wasdappobj = intent.getParcelableExtra("wasdappobj") as SortModel
+        var wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         name_of_this_object.text = wasdappobj.name
         location_of_this_object.text = wasdappobj.locatie

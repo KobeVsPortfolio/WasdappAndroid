@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_update.*
 import kotlinx.android.synthetic.main.activity_update.nav_view
-import model.SortModel
+import model.WasdappEntry
 
 class UpdateActivity : AppCompatActivity() {
 
@@ -17,7 +17,7 @@ class UpdateActivity : AppCompatActivity() {
         setContentView(R.layout.activity_update)
         nav_view.selectedItemId = R.id.navigation_list
 
-        var wasdappobj = intent.getParcelableExtra("wasdappobj") as SortModel
+        var wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         name_update.setText(wasdappobj.name)
         location_update.setText(wasdappobj.locatie)
