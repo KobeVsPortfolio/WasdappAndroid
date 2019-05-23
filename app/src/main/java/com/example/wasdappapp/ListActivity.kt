@@ -51,18 +51,16 @@ class ListActivity : AppCompatActivity() {
 
         var sortList = ArrayList<SortModel>()
         db.collection("wasdapps").get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (document in task.result!!) {
-                        sortList.add(document.toObject(SortModel::class.java))
-                    }
-                    layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
-                    adapter = SortsListAdapter(sortList!!, this)
-
-                    rcv.layoutManager = layoutManager
-                    rcv.adapter = adapter
-                    adapter!!.notifyDataSetChanged()
+            .addOnSuccessListener { task ->
+                for (document in task.documents!!) {
+                    sortList.add(document.toObject(SortModel::class.java)!!)
                 }
+                layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
+                adapter = SortsListAdapter(sortList!!, this)
+
+                rcv.layoutManager = layoutManager
+                rcv.adapter = adapter
+                adapter!!.notifyDataSetChanged()
             }
 
         add_new_object_button.setOnClickListener {

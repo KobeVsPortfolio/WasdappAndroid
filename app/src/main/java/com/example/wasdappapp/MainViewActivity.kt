@@ -20,9 +20,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.android.synthetic.main.activity_main_view.nav_view
+import model.SortModel
 import java.io.IOException
 
 class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -42,13 +44,7 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setUpMap() {
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(
-            MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney")
-        )
-
+        addWasdapps()
         if (ActivityCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -64,45 +60,34 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.isMyLocationEnabled = true
         fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
             if (location != null) {
-                placeMarkerOnMap(LatLng(location.latitude, location.longitude))
                 val currentLangLong = LatLng(location.latitude, location.longitude)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLangLong, 12f))
             }
         }
-
-        mMap.setOnMapClickListener { location ->
-            placeMarkerOnMap(location)
-        }
     }
 
-    private fun getAddress(latLng: LatLng): String {
-        // Create the object
-        val geocoder = Geocoder(this)
-        val addresses: List<Address>?
-        val address: Address?
-        var addressText = ""
-        try {// Asks the geocoder to get the address from the location passed to the method.
-            addresses = geocoder.getFromLocation(
-                latLng.latitude,
-                latLng.longitude,
-                1
-            )// If the response contains any address, then append it to a string and return.
-            if (null != addresses && !addresses.isEmpty()) {
-                address = addresses[0]
-                addressText = address.getAddressLine(0)
+    private fun addWasdapps() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("wasdapps").get()
+            .addOnSuccessListener { task ->
+                for (document in task.documents!!) {
+                    if (document.data!!["lat"] != null && document.data!!["lon"] != null) {
+                        var wasdapplatlon =
+                            LatLng(document.data!!["lat"]!! as Double, document.data!!["lon"]!! as Double)
+                        mMap.addMarker(
+                            MarkerOptions()
+                                .position(wasdapplatlon)
+                                .title(document.data!!["name"] as String)
+                        )
+
+                        mMap.setOnInfoWindowClickListener {
+                            val intent = Intent(this, ThisObjectActivity::class.java)
+                            intent.putExtra("wasdappobj", document.toObject(SortModel::class.java))
+                            startActivity(intent)
+                        }
+                    }
+                }
             }
-        } catch (e: IOException) {
-            Toast.makeText(this, "Not correct", Toast.LENGTH_LONG).show()
-
-        }
-        return addressText
-    }
-
-    private fun placeMarkerOnMap(location: LatLng) {
-        val markerOptions = MarkerOptions().position(location)
-        val titleStr = getAddress(location)  // add these two lines
-        markerOptions.title(titleStr)
-        mMap.addMarker(markerOptions)
     }
 
 
@@ -110,7 +95,6 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
         nav_view.selectedItemId = R.id.navigation_home
-
 
         nav_view.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -147,3 +131,4 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 }
+
