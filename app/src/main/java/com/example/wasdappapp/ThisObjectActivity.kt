@@ -1,14 +1,10 @@
 package com.example.wasdappapp
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.ActivityCompat
-import android.view.View
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -16,7 +12,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
@@ -36,14 +31,17 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setUpMap() {
         val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
-        val latlong = LatLng(wasdappobj.lat!!, wasdappobj.lon!!)
-        mMap.addMarker(
-            MarkerOptions()
-                .position(latlong)
-                .title(getAddress(latlong)))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlong, 12f))
-
+        if (wasdappobj.lat != null && wasdappobj.lon != null) {
+            val latlong = LatLng(wasdappobj.lat!!, wasdappobj.lon!!)
+            mMap.addMarker(
+                MarkerOptions()
+                    .position(latlong)
+                    .title(getAddress(latlong))
+            )
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlong, 12f))
         }
+
+    }
 
     private fun getAddress(latLng: LatLng): String {
         // Create the object
@@ -57,9 +55,8 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
                 address = addresses[0]
                 addressText = address.getAddressLine(0)
             }
-        } catch (e: IOException)
-        {
-            Toast.makeText(this,"Not correct", Toast.LENGTH_LONG).show()
+        } catch (e: IOException) {
+            Toast.makeText(this, "Not correct", Toast.LENGTH_LONG).show()
 
         }
         return addressText
@@ -111,8 +108,7 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         update_object_button.setOnClickListener {
             val intent = Intent(this, UpdateActivity::class.java)
-
-            intent.putExtra("wasdappobj" , wasdappobj)
+            intent.putExtra("wasdappobj", wasdappobj)
             startActivity(intent)
             finish()
         }
