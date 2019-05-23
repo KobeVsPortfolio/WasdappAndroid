@@ -44,7 +44,12 @@ class CreateActivity : AppCompatActivity() {
     cancel_button2.setOnClickListener {
        startActivity(Intent(this, ListActivity::class.java))
         finish()
+
     }
+        photo.setOnClickListener{
+            startActivity(Intent(this, PictureAccess::class.java))
+            finish()
+        }
     }
 
     public override fun onStart() {

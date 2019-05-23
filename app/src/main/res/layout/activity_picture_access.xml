@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".PictureAccess">
+        tools:context=".PictureAccess"
+        android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.AppCompatButton android:id="@+id/take_picture" android:layout_height="137dp"
+                                               android:layout_width="match_parent"
+                                               tools:ignore="MissingConstraints"
+                                               android:text="take picture"/>
+
+
+    <android.support.v7.widget.AppCompatImageView android:id="@+id/picture" android:layout_height="140dp"
+                                                  android:layout_width="match_parent"
+                                                  tools:ignore="MissingConstraints"
+                                                  android:text="take picture"/>
+
+
+</LinearLayout>
