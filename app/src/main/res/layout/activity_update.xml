@@ -197,7 +197,7 @@ android:background="@color/colorPrimary">
             <Button
                     android:text="Update"
                     android:layout_width="220dp"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:id="@+id/update_button"
                     android:background="@drawable/round_bg"
                     android:backgroundTint="@color/colorAccent2"

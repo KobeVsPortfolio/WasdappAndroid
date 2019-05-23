@@ -36,6 +36,7 @@
                     android:textColor="@color/colorAccent"
                     android:layout_marginHorizontal="140dp"
                     android:gravity="center"
+                    android:maxLines="1"
             />
             <Button
                     android:id="@+id/photo"
@@ -196,7 +197,7 @@
             <Button
                     android:text="Add"
                     android:layout_width="220dp"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:id="@+id/confirm_order"
                     android:background="@drawable/round_bg"
                     android:backgroundTint="@color/colorAccent2"
