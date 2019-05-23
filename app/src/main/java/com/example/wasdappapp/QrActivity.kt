@@ -56,8 +56,6 @@ class QrActivity : AppCompatActivity(),ResultHandler {
         }
         scannerView=findViewById(R.id.scanner)
 
-        txtResult = findViewById(R.id.text_result)
-
         if(!checkPermission())
             requestPermisson()
 
