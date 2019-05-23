@@ -36,6 +36,7 @@
                     android:textColor="@color/colorAccent"
                     android:layout_marginHorizontal="140dp"
                     android:gravity="center"
+                    android:maxLines="1"
             />
             <Button
                     android:id="@+id/photo"
