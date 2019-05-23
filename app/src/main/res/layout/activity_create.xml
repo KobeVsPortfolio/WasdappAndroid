@@ -197,8 +197,8 @@
             <Button
                     android:text="Add"
                     android:layout_width="220dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/confirm_order"
+                    android:layout_height="40dp"
+                    android:id="@+id/confirm_entry"
                     android:background="@drawable/round_bg"
                     android:backgroundTint="@color/colorAccent2"
                     android:gravity="center"

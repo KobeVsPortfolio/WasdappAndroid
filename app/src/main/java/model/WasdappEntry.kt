@@ -5,7 +5,7 @@ import android.os.Parcelable
 import java.util.*
 
 
-class SortModel() :Parcelable {
+class WasdappEntry() :Parcelable {
     var name: String? = null
     var locatie: String? = null
     var id: Long? = null
@@ -70,12 +70,12 @@ class SortModel() :Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<SortModel> {
-        override fun createFromParcel(parcel: Parcel): SortModel {
-            return SortModel(parcel)
+    companion object CREATOR : Parcelable.Creator<WasdappEntry> {
+        override fun createFromParcel(parcel: Parcel): WasdappEntry {
+            return WasdappEntry(parcel)
         }
 
-        override fun newArray(size: Int): Array<SortModel?> {
+        override fun newArray(size: Int): Array<WasdappEntry?> {
             return arrayOfNulls(size)
         }
     }
