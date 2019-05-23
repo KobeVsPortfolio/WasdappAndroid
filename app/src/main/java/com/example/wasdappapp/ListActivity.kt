@@ -2,19 +2,15 @@ package com.example.wasdappapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import data.SortsListAdapter
-import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.activity_list.nav_view
-import model.SortModel
+import model.WasdappEntry
 
 class ListActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
@@ -49,11 +45,11 @@ class ListActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
 
-        var sortList = ArrayList<SortModel>()
+        var sortList = ArrayList<WasdappEntry>()
         db.collection("wasdapps").get()
             .addOnSuccessListener { task ->
                 for (document in task.documents!!) {
-                    sortList.add(document.toObject(SortModel::class.java)!!)
+                    sortList.add(document.toObject(WasdappEntry::class.java)!!)
                 }
                 layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
                 adapter = SortsListAdapter(sortList!!, this)

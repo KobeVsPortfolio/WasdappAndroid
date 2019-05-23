@@ -1,16 +1,10 @@
 package com.example.wasdappapp
 
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -21,11 +15,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_account.*
-import kotlinx.android.synthetic.main.activity_main_view.*
 import kotlinx.android.synthetic.main.activity_main_view.nav_view
-import model.SortModel
-import java.io.IOException
+import model.WasdappEntry
 
 class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -82,7 +73,7 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         mMap.setOnInfoWindowClickListener {
                             val intent = Intent(this, ThisObjectActivity::class.java)
-                            intent.putExtra("wasdappobj", document.toObject(SortModel::class.java))
+                            intent.putExtra("wasdappobj", document.toObject(WasdappEntry::class.java))
                             startActivity(intent)
                         }
                     }
