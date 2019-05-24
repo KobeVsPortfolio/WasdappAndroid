@@ -18,8 +18,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".UploadImageActivity">
-        </activity>
+
         <activity android:name=".ChangePasswordActivity">
         </activity>
         <activity android:name=".SignUpActivity">
@@ -36,7 +35,6 @@
         <activity android:name=".UpdateActivity"/>
         <activity android:name=".QrActivity"/>
         <activity android:name=".UploadFile"/>
-        <activity android:name=".PictureAccess"/>
         <activity android:name=".AccountActivity"/>
         <activity android:name=".ListActivity"/>
         <activity
