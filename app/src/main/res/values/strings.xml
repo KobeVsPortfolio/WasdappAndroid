@@ -8,4 +8,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="title_activity_cardview">CardviewActivity</string>
+    <string name="facebook_app_id">2178539878848295</string>
+    <string name="fb_login_protocol_scheme">fb2178539878848295</string>
 </resources>
