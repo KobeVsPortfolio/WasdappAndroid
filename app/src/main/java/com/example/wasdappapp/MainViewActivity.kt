@@ -3,6 +3,7 @@ package com.example.wasdappapp
 import android.content.pm.PackageManager
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -65,15 +66,15 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
                     if (document.data!!["lat"] != null && document.data!!["lon"] != null) {
                         var wasdapplatlon =
                             LatLng(document.data!!["lat"]!! as Double, document.data!!["lon"]!! as Double)
-                        mMap.addMarker(
+                        var marker = mMap.addMarker(
                             MarkerOptions()
                                 .position(wasdapplatlon)
                                 .title(document.data!!["name"] as String)
                         )
-
+                        marker.tag = document.toObject(WasdappEntry::class.java)
                         mMap.setOnInfoWindowClickListener {
                             val intent = Intent(this, ThisObjectActivity::class.java)
-                            intent.putExtra("wasdappobj", document.toObject(WasdappEntry::class.java))
+                            intent.putExtra("wasdappobj",it.tag as Parcelable)
                             startActivity(intent)
                         }
                     }
@@ -122,4 +123,5 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 }
+
 
