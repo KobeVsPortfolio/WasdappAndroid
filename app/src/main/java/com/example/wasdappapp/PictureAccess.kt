@@ -8,14 +8,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
-import kotlinx.android.synthetic.main.activity_picture_access.*
 import java.io.File
 import java.io.IOException
 
 class PictureAccess : AppCompatActivity(){
 
    // private lateinit var auth : FirebaseAuth
-    lateinit var photoPath: String
+   /* lateinit var photoPath: String
     val REQUEST_TAKE_PHOTO = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +69,6 @@ class PictureAccess : AppCompatActivity(){
 
         return image
     }
-
+*/
 
 }

@@ -20,7 +20,6 @@ import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_create.nav_view
-import kotlinx.android.synthetic.main.activity_picture_access.*
 import model.WasdappEntry
 import java.io.File
 import java.io.IOException
