@@ -1,43 +1,41 @@
 package com.example.wasdappapp
 
+import android.app.Activity
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.location.LocationListener
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.support.annotation.RequiresApi
+import android.support.v4.content.FileProvider
 import android.os.Looper
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
-import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_create.nav_view
 import model.WasdappEntry
+import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import android.graphics.Bitmap
+import java.io.ByteArrayOutputStream
+
 
 class CreateActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
@@ -49,6 +47,9 @@ class CreateActivity : AppCompatActivity() {
     private val FASTEST_INTERVAL: Long = 1000
     lateinit var mLastLocation: Location
     internal lateinit var mLocationRequest: LocationRequest
+
+    lateinit var photoPath: String
+    val REQUEST_TAKE_PHOTO = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +91,10 @@ class CreateActivity : AppCompatActivity() {
             handleLocation()
             createEntry()
         }
+        photo.setOnClickListener {
+            takePicture()
+        }
+
     }
 
     private fun handleLocation() {
@@ -115,7 +120,7 @@ class CreateActivity : AppCompatActivity() {
         }
     }
 
-    fun createEntry() {
+    private fun createEntry() {
         val entry = WasdappEntry()
         entry.name = name.text.toString()
         entry.locatie = location.text.toString()
@@ -131,6 +136,7 @@ class CreateActivity : AppCompatActivity() {
         entry.wijzigDatum = Calendar.getInstance().time
         entry.lon = latLong!!.longitude
         entry.lat = latLong!!.latitude
+        entry.image = photo.text.toString()
 
         collection.get().addOnCompleteListener {
             if (it.result!!.isEmpty) {
@@ -154,6 +160,68 @@ class CreateActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun takePicture() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        if (intent.resolveActivity(packageManager) != null) {
+            var photoFile: File? = null
+            try {
+                photoFile = createImageFile()
+            } catch (e: IOException) {
+            }
+            if (photoFile != null) {
+                val photoUri = FileProvider.getUriForFile(this, "com.example.wasdappapp.fileprovider", photoFile)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                startActivityForResult(intent, REQUEST_TAKE_PHOTO)
+            }
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            val base64 = encoder(photoPath)
+            photo.setTextKeepState(base64)
+            photo.textSize = 0f
+            val bitmap = BitmapFactory.decodeFile(photoPath)
+            val resizedBitmap = resizeBitmap(bitmap, 512, 512)
+            photoImage.setImageBitmap(resizedBitmap)
+        }
+    }
+
+    private fun createImageFile(): File? {
+        val timeStamp: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
+        val fileName = timeStamp
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            fileName,
+            ".jpg",
+            storageDir
+        ).apply { photoPath = absolutePath }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun encoder(filePath: String): String {
+        val bitmap = BitmapFactory.decodeFile(filePath)
+        val resizedBitmap = resizeBitmap(bitmap, 256, 256)
+        val stream = ByteArrayOutputStream()
+        resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val bytes = stream.toByteArray()
+        return Base64.getEncoder().encodeToString(bytes)
+    }
+
+    private fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
+        return Bitmap.createScaledBitmap(
+            bitmap,
+            width,
+            height,
+            false
+        )
+
+    }
+
 
     private fun getLatLongFromAdress(adress: String): LatLng {
         if (adress == null) {

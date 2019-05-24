@@ -1,10 +1,15 @@
 package com.example.wasdappapp
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.RequiresApi
+import android.util.Base64
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
 import model.WasdappEntry
 import java.io.IOException
+import java.lang.Exception
 
 class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -65,12 +71,13 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
     val auth = FirebaseAuth.getInstance()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_this_object)
         nav_view.selectedItemId = R.id.navigation_list
 
-        var wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
+        val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         name_of_this_object.text = wasdappobj.name
         location_of_this_object.text = wasdappobj.locatie
@@ -82,6 +89,11 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         telephone_of_this_object.text = wasdappobj.telefoonNummer
         email_of_this_object.text = wasdappobj.email
         location_of_this_object.text = wasdappobj.locatie
+        if(wasdappobj.image != null) {
+        val bitmap = decoder(wasdappobj.image!!)
+            photo_this_object.setImageBitmap(bitmap)
+        }
+
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -120,6 +132,15 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    fun decoder(base64Str: String): Bitmap{
+        try {
+            val imageBytes = Base64.decode(base64Str, 0)
+            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        }catch (e : Exception){
+            return BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher)
         }
     }
 }
