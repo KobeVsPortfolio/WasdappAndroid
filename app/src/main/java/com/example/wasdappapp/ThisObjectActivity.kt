@@ -21,9 +21,8 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
 import model.WasdappEntry
-import java.io.File
 import java.io.IOException
-import java.util.*
+import java.lang.Exception
 
 class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -78,7 +77,7 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_this_object)
         nav_view.selectedItemId = R.id.navigation_list
 
-        var wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
+        val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         name_of_this_object.text = wasdappobj.name
         location_of_this_object.text = wasdappobj.locatie
@@ -90,7 +89,10 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         telephone_of_this_object.text = wasdappobj.telefoonNummer
         email_of_this_object.text = wasdappobj.email
         location_of_this_object.text = wasdappobj.locatie
-        photo_this_object.setImageBitmap(decoder(wasdappobj.image!!))
+        if(wasdappobj.image != null) {
+        val bitmap = decoder(wasdappobj.image!!)
+            photo_this_object.setImageBitmap(bitmap)
+        }
 
 
         val mapFragment = supportFragmentManager
@@ -134,8 +136,11 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun decoder(base64Str: String): Bitmap{
-        val imageBytes = Base64.decode(base64Str, 0)
-        val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        return image
+        try {
+            val imageBytes = Base64.decode(base64Str, 0)
+            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        }catch (e : Exception){
+            return BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher)
+        }
     }
 }

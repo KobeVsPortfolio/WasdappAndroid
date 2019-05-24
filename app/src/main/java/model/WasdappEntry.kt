@@ -66,7 +66,7 @@ class WasdappEntry() :Parcelable {
         parcel.writeString(persoon)
         parcel.writeValue(lat)
         parcel.writeValue(lon)
-        parcel.writeValue(image)
+        parcel.writeString(image)
     }
 
     override fun describeContents(): Int {
