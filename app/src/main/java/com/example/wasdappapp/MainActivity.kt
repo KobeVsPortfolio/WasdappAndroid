@@ -3,8 +3,8 @@ package com.example.wasdappapp
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
-import android.widget.ImageButton
 import android.widget.Toast
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -19,10 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.TwitterAuthProvider
+import com.google.firebase.auth.*
 import com.twitter.sdk.android.core.*
 import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var mGoogleSignInOptions: GoogleSignInOptions
     private lateinit var callbackManager: CallbackManager
     lateinit var mTwitterAuthClient: TwitterAuthClient
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,19 +51,19 @@ class MainActivity : AppCompatActivity() {
         Twitter.initialize(config)
 
         setContentView(R.layout.activity_main)
+        auth = FirebaseAuth.getInstance()
+
+        password.transformationMethod = PasswordTransformationMethod()
 
         mTwitterAuthClient = TwitterAuthClient()
 
         callbackManager = CallbackManager.Factory.create()
 
-
         AppEventsLogger.activateApp(getApplication())
-
-        auth = FirebaseAuth.getInstance()
 
         configureGoogleSignIn()
         setupUI()
-        
+
         login_with_twitter.setOnClickListener {
             mTwitterAuthClient.authorize(this, object : Callback<TwitterSession>() {
                 override fun success(result: Result<TwitterSession>?) {
@@ -82,14 +78,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         login_with_email.setOnClickListener {
-            startActivity(Intent(this, MainViewActivity::class.java))
-            finish()
-        }
-        sign_up.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-            finish()
+            var email = email.text.toString()
+            var password = password.text.toString()
+
+            if (!email.isBlank() && !password.isBlank()) {
+                signIn(email, password)
+            } else {
+                Toast.makeText(this, "Please provide an email and password.", Toast.LENGTH_SHORT).show()
+            }
         }
 
+        sign_up.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
         login_with_facebook.setOnClickListener {
 
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email"))
@@ -110,13 +112,29 @@ class MainActivity : AppCompatActivity() {
             })
 
         }
+
     }
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val user = auth.currentUser
-        println(user)
+        val currentUser = auth.currentUser
+        updateUI(currentUser)
+    }
+
+    private fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    Toast.makeText(
+                        baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    updateUI(null)
+                }
+            }
     }
 
     private fun configureGoogleSignIn() {
@@ -162,8 +180,8 @@ class MainActivity : AppCompatActivity() {
                     baseContext, "Welcome  ${acct.displayName}.",
                     Toast.LENGTH_LONG
                 ).show()
-                startActivity(Intent(this, CreateActivity::class.java))
-                finish()
+                val user = auth.currentUser
+                updateUI(user)
             } else {
                 Toast.makeText(this, "Google sign in failed:( ....", Toast.LENGTH_LONG).show()
             }
@@ -178,8 +196,8 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     println("signInWithCredential:success")
-                    val user = auth!!.currentUser
-                    startActivity(Intent(this@MainActivity, CreateActivity::class.java))
+                    val user = auth.currentUser
+                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     println("signInWithCredential:failure" + task.getException())
@@ -205,6 +223,7 @@ class MainActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     println("signInWithCredential:success")
                     val user = auth.currentUser
+                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
                     println("signInWithCredential:failure" + task.exception)
@@ -215,5 +234,12 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+    }
+
+    private fun updateUI(currentUser: FirebaseUser?) {
+        if (currentUser != null) {
+            val intent = Intent(this, MainViewActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

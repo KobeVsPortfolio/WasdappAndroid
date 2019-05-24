@@ -1,16 +1,10 @@
 package com.example.wasdappapp
 
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,15 +13,16 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_account.*
-import kotlinx.android.synthetic.main.activity_main_view.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main_view.nav_view
-import java.io.IOException
+import model.WasdappEntry
 
 class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    val auth = FirebaseAuth.getInstance()
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -35,17 +30,12 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
-    private fun setUpMap() {
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(
-            MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney"))
 
+    private fun setUpMap() {
+        addWasdapps()
         if (ActivityCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -61,66 +51,56 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.isMyLocationEnabled = true
         fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
             if (location != null) {
-                placeMarkerOnMap(LatLng(location.latitude, location.longitude))
                 val currentLangLong = LatLng(location.latitude, location.longitude)
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLangLong, 12f))
             }
         }
-
-        mMap.setOnMapClickListener {
-                location ->
-            placeMarkerOnMap(location)
-        }
     }
 
-    private fun getAddress(latLng: LatLng): String {
-        // Create the object
-        val geocoder = Geocoder(this)
-        val addresses: List<Address>?
-        val address: Address?
-        var addressText = ""
-        try {// Asks the geocoder to get the address from the location passed to the method.
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)// If the response contains any address, then append it to a string and return.
-            if (null != addresses && !addresses.isEmpty()) {
-                address = addresses[0]
-                addressText = address.getAddressLine(0)
+    private fun addWasdapps() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("wasdapps").get()
+            .addOnSuccessListener { task ->
+                for (document in task.documents!!) {
+                    if (document.data!!["lat"] != null && document.data!!["lon"] != null) {
+                        var wasdapplatlon =
+                            LatLng(document.data!!["lat"]!! as Double, document.data!!["lon"]!! as Double)
+                        mMap.addMarker(
+                            MarkerOptions()
+                                .position(wasdapplatlon)
+                                .title(document.data!!["name"] as String)
+                        )
+
+                        mMap.setOnInfoWindowClickListener {
+                            val intent = Intent(this, ThisObjectActivity::class.java)
+                            intent.putExtra("wasdappobj", document.toObject(WasdappEntry::class.java))
+                            startActivity(intent)
+                        }
+                    }
+                }
             }
-        } catch (e: IOException)
-        {
-            Toast.makeText(this,"Not correct", Toast.LENGTH_LONG).show()
-
-        }
-        return addressText
     }
 
-    private fun placeMarkerOnMap(location: LatLng) {
-        val markerOptions = MarkerOptions().position(location)
-        val titleStr = getAddress(location)  // add these two lines
-        markerOptions.title(titleStr)
-        mMap.addMarker(markerOptions)}
 
-
-
-override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
-    nav_view.selectedItemId = R.id.navigation_home
-
+        nav_view.selectedItemId = R.id.navigation_home
 
         nav_view.setOnNavigationItemSelectedListener { item ->
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_list ->
                     startActivity(Intent(this, ListActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_qr_code ->
                     startActivity(Intent(this, QrActivity::class.java))
             }
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
@@ -132,4 +112,14 @@ override fun onCreate(savedInstanceState: Bundle?) {
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
+
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+    }
 }
+
