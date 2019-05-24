@@ -3,7 +3,6 @@ package com.example.wasdappapp
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -26,20 +25,15 @@ class UploadFile : AppCompatActivity() {
 
     }
 
-
-    var selectedPhotoUri: Uri? = null
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-            //Log.d("UploadFile", "foto geselecteerd")
-            selectedPhotoUri = data.data
+//Log.d("UploadFile", "foto geselecteerd")
+            val uri = data.data
 
-           val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
-            circle.setImageBitmap(bitmap)
-            select_photo_button.alpha = 0f
-          //  val bitmapDrawable = BitmapDrawable(bitmap)
-           // select_photo_button.setBackgroundDrawable(bitmapDrawable)
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            val bitmapDrawable = BitmapDrawable(bitmap)
+            select_photo_button.setBackgroundDrawable(bitmapDrawable)
         }
 
     }

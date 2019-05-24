@@ -25,6 +25,7 @@ class WasdappEntry() :Parcelable {
     var wijzigDatum: Date? = null
     var lat: Double? = null
     var lon: Double? = null
+    var image: String? = null
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
@@ -44,6 +45,7 @@ class WasdappEntry() :Parcelable {
         persoon = parcel.readString()
         lat = parcel.readValue(Double::class.java.classLoader) as? Double
         lon = parcel.readValue(Double::class.java.classLoader) as? Double
+        image = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -64,6 +66,7 @@ class WasdappEntry() :Parcelable {
         parcel.writeString(persoon)
         parcel.writeValue(lat)
         parcel.writeValue(lon)
+        parcel.writeString(image)
     }
 
     override fun describeContents(): Int {
