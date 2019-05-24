@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity() {
             })
 
         }
-
     }
 
     public override fun onStart() {
