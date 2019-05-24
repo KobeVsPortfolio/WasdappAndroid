@@ -7,9 +7,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.core.View
 import data.SortsListAdapter
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.activity_list.nav_view
+import kotlinx.android.synthetic.main.activity_this_object.*
 import model.WasdappEntry
 
 class ListActivity : AppCompatActivity() {
@@ -63,6 +65,7 @@ class ListActivity : AppCompatActivity() {
             startActivity(Intent(this, CreateActivity::class.java))
             finish()
         }
+        progressBar2.visibility
     }
 
     public override fun onStart() {
