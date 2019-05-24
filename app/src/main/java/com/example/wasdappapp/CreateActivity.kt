@@ -56,6 +56,11 @@ class CreateActivity : AppCompatActivity() {
         confirm_entry.setOnClickListener {
             createEntry()
         }
+
+        photo.setOnClickListener {
+            startActivity(Intent(this, UploadFile::class.java))
+            finish()
+        }
     }
 
     public override fun onStart() {
