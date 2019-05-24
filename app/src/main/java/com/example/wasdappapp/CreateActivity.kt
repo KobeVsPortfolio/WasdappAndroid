@@ -219,7 +219,6 @@ class CreateActivity : AppCompatActivity() {
             height,
             false
         )
-
     }
 
 

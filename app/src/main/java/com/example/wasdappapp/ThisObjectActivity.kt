@@ -88,7 +88,6 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         description_of_this_object.text = wasdappobj.omschrijving
         telephone_of_this_object.text = wasdappobj.telefoonNummer
         email_of_this_object.text = wasdappobj.email
-        location_of_this_object.text = wasdappobj.locatie
         if(wasdappobj.image != null) {
         val bitmap = decoder(wasdappobj.image!!)
             photo_this_object.setImageBitmap(bitmap)
