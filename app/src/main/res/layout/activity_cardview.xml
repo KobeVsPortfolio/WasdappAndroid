@@ -67,7 +67,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/bin_button"
+                        android:id="@+id/trash_button"
                         android:layout_weight="1"
                         android:drawableStart="@drawable/ic_iconmonstr_trash_can_2"
                         android:background="@drawable/round_bg"

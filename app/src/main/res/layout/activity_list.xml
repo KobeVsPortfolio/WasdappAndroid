@@ -7,7 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ThisObjectActivity"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+android:orientation="vertical">
     <ProgressBar
             android:layout_width="95dp"
             android:layout_height="100dp"
