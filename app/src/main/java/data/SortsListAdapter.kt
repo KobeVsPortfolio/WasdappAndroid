@@ -77,6 +77,7 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
         }
     }
     }
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SortsListAdapter.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.activity_cardview, p0, false)
         return ViewHolder(view)
@@ -98,4 +99,5 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
             return BitmapFactory.decodeResource(context.resources, R.drawable.logo_wasdap4)
         }
     }
-}
+    }
+
