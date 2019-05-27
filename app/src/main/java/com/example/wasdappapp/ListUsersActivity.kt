@@ -6,14 +6,18 @@ import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.Toast
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_list_users.*
+import data.UsersAdapter
 import model.User
+import kotlinx.android.synthetic.main.activity_list_users.*
 
 class ListUsersActivity : AppCompatActivity() {
-
     val auth = FirebaseAuth.getInstance()
+    private var adapter: UsersAdapter? = null
+    private var layoutManager: RecyclerView.LayoutManager? = null
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("users")
     private val currentUser = auth.currentUser
@@ -23,6 +27,8 @@ class ListUsersActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_users)
+
+        getUser()
 
         add_user_password.transformationMethod = PasswordTransformationMethod()
         add_user_confirm_password.transformationMethod = PasswordTransformationMethod()
@@ -88,7 +94,7 @@ class ListUsersActivity : AppCompatActivity() {
             .addOnCompleteListener(this)
             { task ->
                 if (task.isSuccessful) {
-                    if(admin){
+                    if (admin) {
                         val user = HashMap<String, Any>()
                         user["email"] = email
                         user["role"] = "admin"
@@ -97,7 +103,7 @@ class ListUsersActivity : AppCompatActivity() {
                             baseContext, "Admin with email: $email has been added.",
                             Toast.LENGTH_SHORT
                         ).show()
-                    }else {
+                    } else {
                         val user = HashMap<String, Any>()
                         user["email"] = email
                         user["role"] = "user"
@@ -117,6 +123,21 @@ class ListUsersActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            }
+    }
+
+    fun getUser() {
+        var userList = ArrayList<User>()
+        collection.get()
+            .addOnSuccessListener { task ->
+                for (document in task.documents!!) {
+                    userList.add(document.toObject(User::class.java)!!)
+                }
+                layoutManager = LinearLayoutManager(this)
+                adapter = UsersAdapter(userList, this)
+                rv_users.layoutManager = layoutManager
+                rv_users.adapter = adapter
+                adapter!!.notifyDataSetChanged()
             }
     }
     public override fun onStart() {
