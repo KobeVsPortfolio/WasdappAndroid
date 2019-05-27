@@ -20,6 +20,7 @@ class SignUpActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         password.transformationMethod = PasswordTransformationMethod()
+        repeatPassword.transformationMethod = PasswordTransformationMethod()
 
         sign_up_button.setOnClickListener {
             val email = email.text.toString()
@@ -37,7 +38,7 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "This member does not exist.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please fill in all the fields.", Toast.LENGTH_SHORT).show()
             }
         }
 
