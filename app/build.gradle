@@ -21,6 +21,11 @@ android {
         }
     }
 }
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -53,6 +58,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:19.0.0'
     implementation 'com.google.firebase:firebase-auth:17.0.0'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.27.0-eap13"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0-eap13"
 }
 
 

@@ -34,7 +34,6 @@
         <activity android:name=".CreateActivity"/>
         <activity android:name=".UpdateActivity"/>
         <activity android:name=".QrActivity"/>
-        <activity android:name=".UploadFile"/>
         <activity android:name=".AccountActivity"/>
         <activity android:name=".ListActivity"/>
         <activity

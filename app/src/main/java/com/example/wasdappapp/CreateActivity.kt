@@ -2,8 +2,6 @@ package com.example.wasdappapp
 
 import android.app.Activity
 import android.Manifest
-import android.Manifest.permission.CAMERA
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -36,11 +34,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.media.MediaRecorder.VideoSource.CAMERA
+import android.net.Uri
 import android.support.v4.content.ContextCompat
-import android.util.Log
-import kotlinx.android.synthetic.main.activity_upload_file.*
+import android.view.View
+import android.widget.ProgressBar
 import java.io.ByteArrayOutputStream
 
 
@@ -57,12 +54,19 @@ class CreateActivity : AppCompatActivity() {
 
     lateinit var photoPath: String
     val REQUEST_TAKE_PHOTO = 1
-    val UPLOAD_VIEW = 2
+    val IMAGE_PICK_REQUEST = 2
+    val KEY_IMAGE_URI = "imageUri"
     private val PERMISSION_REQUEST_CODE: Int = 101
+
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+
+        progressBar.bringToFront()
+        progressBar.visibility = View.INVISIBLE
+
         nav_view.selectedItemId = R.id.navigation_list
 
         if (checkPermissionForLocation(this)) {
@@ -102,17 +106,17 @@ class CreateActivity : AppCompatActivity() {
         }
         photo.setOnClickListener {
             if (checkPermission()) takePicture() else requestPermission()
-
-
         }
 
 
         upload.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).also { it.type = "image/*" }
+            startActivityForResult(intent, IMAGE_PICK_REQUEST)
+        }
 
-            Log.d("UploadFile", "selctor touched")
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, UPLOAD_VIEW)
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_IMAGE_URI)) {
+            imageUri = savedInstanceState.getParcelable(KEY_IMAGE_URI) as Uri
+            imageUri?.let { loadAndShowPhoto(it) }
         }
 
     }
@@ -243,22 +247,10 @@ class CreateActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == UPLOAD_VIEW && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == IMAGE_PICK_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            imageUri = data.data
+            loadAndShowPhoto(data.data)
 
-
-            val uri = data.data
-
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-            println(bitmap.height)
-            val resizedBitmap = resizeBitmap(bitmap, 512, 512)
-            photoImage.setImageBitmap(resizedBitmap)
-
-            val byteArrayOutputStream = ByteArrayOutputStream();
-            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            val byteArray = byteArrayOutputStream.toByteArray()
-            val encoded = Base64.getEncoder().encodeToString(byteArray)
-            photo.setTextKeepState(encoded)
-            photo.textSize = 0f
 
         }
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
@@ -271,12 +263,38 @@ class CreateActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        if (outState != null && imageUri != null) {
+            outState.putParcelable(KEY_IMAGE_URI, imageUri)
+        }
+    }
+
+    private fun loadAndShowPhoto(uri: Uri) {
+        progressBar.visibility = View.VISIBLE
+        load {
+            MediaStore.Images.Media.getBitmap(contentResolver, uri)
+
+        } then {
+            val resizedBitmap = resizeBitmap(it, 512, 512)
+            photoImage.setImageBitmap(resizedBitmap)
+            progressBar.visibility = View.INVISIBLE
+
+            val byteArrayOutputStream = ByteArrayOutputStream();
+            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            val byteArray = byteArrayOutputStream.toByteArray()
+            val encoded = Base64.getEncoder().encodeToString(byteArray)
+            photo.setTextKeepState(encoded)
+            photo.textSize = 0f
+
+        }
+    }
+
     private fun createImageFile(): File? {
         val timeStamp: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-        val fileName = timeStamp
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-            fileName,
+            timeStamp,
             ".jpg",
             storageDir
         ).apply { photoPath = absolutePath }
@@ -299,7 +317,6 @@ class CreateActivity : AppCompatActivity() {
             height,
             false
         )
-
     }
 
 
