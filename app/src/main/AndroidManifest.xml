@@ -20,10 +20,6 @@
             android:theme="@style/AppTheme">
         <activity android:name=".ListUsersActivity">
         </activity>
-        <activity android:name=".AdminUsersActivity">
-        </activity>
-        <activity android:name=".BinActivity">
-        </activity>
 
         <activity android:name=".ChangePasswordActivity">
         </activity>
@@ -36,7 +32,6 @@
 
         <activity android:name=".ThisObjectActivity">
         </activity>
-        <activity android:name=".CardviewActivity"/>
         <activity android:name=".CreateActivity"/>
         <activity android:name=".UpdateActivity"/>
         <activity android:name=".QrActivity"/>
