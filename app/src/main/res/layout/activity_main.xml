@@ -6,7 +6,8 @@
         android:id="@+id/relLay"
         android:layout_height="match_parent"
         tools:context=".MainActivity"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+android:orientation="vertical">
 
     <ImageView
             android:id="@+id/image"
