@@ -60,7 +60,7 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
             val imageBytes = Base64.decode(base64Str, 0)
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         } catch (e: Exception) {
-            return BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher)
+            return BitmapFactory.decodeResource(context.resources, R.drawable.logo_wasdap4)
         }
     }
 }

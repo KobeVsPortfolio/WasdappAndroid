@@ -139,7 +139,7 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             val imageBytes = Base64.decode(base64Str, 0)
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         }catch (e : Exception){
-            return BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher)
+            return BitmapFactory.decodeResource(this.resources, R.drawable.logo_wasdap4)
         }
     }
 }

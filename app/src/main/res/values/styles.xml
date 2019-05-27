@@ -13,4 +13,13 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="FacebookLoginButton">
+        <item name="android:background">@color/google</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginLeft">60dp</item>
+        <item name="android:layout_marginRight">60dp</item>
+        <item name="android:height">40dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
 </resources>
