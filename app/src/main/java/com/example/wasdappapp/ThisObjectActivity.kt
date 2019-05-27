@@ -88,7 +88,6 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         description_of_this_object.text = wasdappobj.omschrijving
         telephone_of_this_object.text = wasdappobj.telefoonNummer
         email_of_this_object.text = wasdappobj.email
-        location_of_this_object.text = wasdappobj.locatie
         if(wasdappobj.image != null) {
         val bitmap = decoder(wasdappobj.image!!)
             photo_this_object.setImageBitmap(bitmap)
@@ -144,7 +143,7 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             val imageBytes = Base64.decode(base64Str, 0)
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         }catch (e : Exception){
-            return BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher)
+            return BitmapFactory.decodeResource(this.resources, R.drawable.logo_wasdap4)
         }
     }
 }
