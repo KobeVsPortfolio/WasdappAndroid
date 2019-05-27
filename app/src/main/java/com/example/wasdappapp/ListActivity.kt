@@ -11,21 +11,34 @@ import com.google.firebase.firestore.core.View
 import data.SortsListAdapter
 import kotlinx.android.synthetic.main.activity_list.*
 import kotlinx.android.synthetic.main.activity_list.nav_view
-import kotlinx.android.synthetic.main.activity_this_object.*
+import model.User
 import model.WasdappEntry
 
 class ListActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
+    private val currentUser = auth.currentUser
+    private val db = FirebaseFirestore.getInstance()
+    private val userCollection = db.collection("users")
     private var adapter: SortsListAdapter? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
-        nav_view.selectedItemId = R.id.navigation_list
 
+        nav_view.visibility = android.view.View.VISIBLE
+        nav_view_admin.visibility = android.view.View.INVISIBLE
 
-        nav_view.setOnNavigationItemSelectedListener { item ->
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+            if(user?.role == "admin"){
+                nav_view.visibility = android.view.View.INVISIBLE
+                nav_view_admin.visibility = android.view.View.VISIBLE
+            }
+        }
+
+        nav_view_admin.selectedItemId = R.id.navigation_list
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
@@ -45,6 +58,27 @@ class ListActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.admin_users ->
                     startActivity(Intent(this, ListUsersActivity::class.java))
+            }
+            true
+        }
+
+        nav_view.selectedItemId = R.id.navigation_list
+        nav_view.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
             }
             true
         }
@@ -73,7 +107,6 @@ class ListActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
