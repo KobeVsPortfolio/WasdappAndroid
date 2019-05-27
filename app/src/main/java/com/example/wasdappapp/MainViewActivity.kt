@@ -16,9 +16,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main_view.nav_view
+import model.MyClusterItem
 import model.WasdappEntry
 import com.google.maps.android.clustering.ClusterManager
-import model.MyClusterItem
 
 class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -116,6 +116,10 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
                 when (item.itemId) {
                     R.id.navigation_account ->
                         startActivity(Intent(this, AccountActivity::class.java))
+                }
+                when (item.itemId) {
+                    R.id.admin_users ->
+                        startActivity(Intent(this, ListUsersActivity::class.java))
                 }
 
                 true
