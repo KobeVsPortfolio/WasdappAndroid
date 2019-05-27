@@ -13,7 +13,7 @@ class ListUsersActivity : AppCompatActivity() {
 
     val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-    private val collection = db.collection("admins")
+    private val collection = db.collection("users")
     var admin = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +27,7 @@ class ListUsersActivity : AppCompatActivity() {
             val email = add_email.text.toString()
             val password = add_user_password.text.toString()
             val repeatPassword = add_user_confirm_password.text.toString()
-            if(checkBox.isChecked){
-                admin = true
-            }
+            admin = checkBox.isChecked
             if (!(email.isBlank() && password.isBlank())) {
                 if (password == repeatPassword) {
                     if (password.length > 5) {
@@ -79,14 +77,19 @@ class ListUsersActivity : AppCompatActivity() {
             { task ->
                 if (task.isSuccessful) {
                     if(admin){
-                        val administrator = HashMap<String, Any>()
-                        administrator["email"] = email
-                        collection.document(email).set(administrator)
+                        val user = HashMap<String, Any>()
+                        user["email"] = email
+                        user["role"] = "admin"
+                        collection.document(email).set(user)
                         Toast.makeText(
                             baseContext, "Admin with email: $email has been added.",
                             Toast.LENGTH_SHORT
                         ).show()
                     }else {
+                        val user = HashMap<String, Any>()
+                        user["email"] = email
+                        user["role"] = "user"
+                        collection.document(email).set(user)
                         Toast.makeText(
                             baseContext, "User with email: $email has been added.",
                             Toast.LENGTH_SHORT
@@ -95,6 +98,7 @@ class ListUsersActivity : AppCompatActivity() {
                     add_user_password.text = null
                     add_user_confirm_password.text = null
                     add_email.text = null
+                    checkBox.isChecked = false
                 } else {
                     Toast.makeText(
                         baseContext, "Usercreation failed, email is invalid or already in use.",
