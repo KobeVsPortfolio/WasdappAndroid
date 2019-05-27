@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "410436301128-ritcpup5m880ajk096hmcspstpv8dd6e.apps.googleusercontent.com",
+          "client_id": "410436301128-nsj3jgnmcobi9p5985rdg40ceqanrth6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.wasdappapp",
-            "certificate_hash": "48fa34329df58d30233e1f94120027b508cba3af"
+            "certificate_hash": "00611fe6b45d87182eaacd9ee511e76e90f29204"
           }
         },
         {
-          "client_id": "410436301128-co23g0dsvc9ha6gpvnnc01rmqpdfotm5.apps.googleusercontent.com",
+          "client_id": "410436301128-clge86eqf042p52f1fut4guatj81er9p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.wasdappapp",
-            "certificate_hash": "75ccacc313d6a81868755f0e64e291e517cad2f4"
+            "certificate_hash": "ffafa1feb271b2ad76a105fc9c484b428e5337bd"
           }
         },
         {
@@ -44,7 +44,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "410436301128-vhef17f70e4gmd7vo2i29j4jbjs5jng9.apps.googleusercontent.com",
+              "client_id": "410436301128-gb2mvmm5k8eqgte4moeo9jngamoh48m7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
