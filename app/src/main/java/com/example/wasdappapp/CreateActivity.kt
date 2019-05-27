@@ -37,7 +37,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.ProgressBar
+import model.User
 import java.io.ByteArrayOutputStream
 
 
@@ -45,6 +45,8 @@ class CreateActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     val collection = db.collection("wasdapps")
+    private val currentUser = auth.currentUser
+    private val userCollection = db.collection("users")
     var latLong: LatLng? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private val INTERVAL: Long = 2000
@@ -67,14 +69,24 @@ class CreateActivity : AppCompatActivity() {
         progressBar.bringToFront()
         progressBar.visibility = View.INVISIBLE
 
-        nav_view.selectedItemId = R.id.navigation_list
-
         if (checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
         mLocationRequest = LocationRequest()
 
-        nav_view.setOnNavigationItemSelectedListener { item ->
+        nav_view.visibility = View.VISIBLE
+        nav_view_admin.visibility = View.INVISIBLE
+
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+            if(user?.role == "admin"){
+                nav_view.visibility = View.INVISIBLE
+                nav_view_admin.visibility = View.VISIBLE
+            }
+        }
+
+        nav_view_admin.selectedItemId = R.id.navigation_list
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
@@ -95,10 +107,30 @@ class CreateActivity : AppCompatActivity() {
                 R.id.admin_users ->
                     startActivity(Intent(this, ListUsersActivity::class.java))
             }
-
             true
-
         }
+
+        nav_view.selectedItemId = R.id.navigation_list
+        nav_view.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
+            }
+            true
+        }
+
         cancel_button2.setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))
             finish()
@@ -181,7 +213,6 @@ class CreateActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
