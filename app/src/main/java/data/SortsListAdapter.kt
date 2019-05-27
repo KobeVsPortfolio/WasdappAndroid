@@ -39,7 +39,6 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
                 context.startActivity(intent)
             }
         }
-
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SortsListAdapter.ViewHolder {
