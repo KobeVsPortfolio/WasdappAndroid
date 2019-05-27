@@ -4,16 +4,20 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_list_users.*
+import model.User
 
 class ListUsersActivity : AppCompatActivity() {
 
     val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val collection = db.collection("users")
+    private val currentUser = auth.currentUser
+    private val userCollection = db.collection("users")
     var admin = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +48,17 @@ class ListUsersActivity : AppCompatActivity() {
             }
         }
 
-        nav_view.selectedItemId = R.id.admin_users
-        nav_view.setOnNavigationItemSelectedListener { item ->
+        nav_view_admin.visibility = View.INVISIBLE
+
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+            if(user?.role == "admin"){
+                nav_view_admin.visibility = View.VISIBLE
+            }
+        }
+
+        nav_view_admin.selectedItemId = R.id.admin_users
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
@@ -61,7 +74,6 @@ class ListUsersActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
-
             }
             when (item.itemId) {
                 R.id.admin_users ->
@@ -106,5 +118,12 @@ class ListUsersActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+    }
+    public override fun onStart() {
+        super.onStart()
+        if (currentUser == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

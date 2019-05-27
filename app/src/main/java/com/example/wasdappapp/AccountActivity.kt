@@ -8,18 +8,25 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AlertDialog
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_account.*
+import model.User
 
 class AccountActivity : AppCompatActivity() {
 
     val auth = FirebaseAuth.getInstance()
     val email = auth.currentUser?.email
+    private val currentUser = auth.currentUser
+    private val db = FirebaseFirestore.getInstance()
+    private val userCollection = db.collection("users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +40,42 @@ class AccountActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+
+        nav_view.visibility = View.VISIBLE
+        nav_view_admin.visibility = View.INVISIBLE
+
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+                if(user?.role == "admin"){
+                    nav_view.visibility = View.INVISIBLE
+                    nav_view_admin.visibility = View.VISIBLE
+                }
+        }
+
+        nav_view_admin.selectedItemId = R.id.navigation_account
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.admin_users ->
+                    startActivity(Intent(this, ListUsersActivity::class.java))
+            }
+            true
         }
 
         nav_view.selectedItemId = R.id.navigation_account
@@ -52,15 +95,10 @@ class AccountActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
-
-            }
-            when (item.itemId) {
-                R.id.admin_users ->
-                    startActivity(Intent(this, ListUsersActivity::class.java))
             }
             true
-
         }
+
         change_password.setOnClickListener {
             startActivity(Intent(this, ChangePasswordActivity::class.java))
             finish()
@@ -69,7 +107,6 @@ class AccountActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -96,7 +133,8 @@ class AccountActivity : AppCompatActivity() {
                 ?.addOnCompleteListener {
                     if (it.isSuccessful) {
                         auth.currentUser?.delete()
-                        Toast.makeText(applicationContext, "$email has been deleted.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "$email has been deleted.", Toast.LENGTH_SHORT)
+                            .show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                     } else {
