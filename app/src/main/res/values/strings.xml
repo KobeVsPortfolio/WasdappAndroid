@@ -5,6 +5,7 @@
     <string name="title_list">List</string>
     <string name="title_qr_code">QR-Code</string>
     <string name="title_account">Account</string>
+    <string name="admin_users">Users</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="title_activity_cardview">CardviewActivity</string>
@@ -12,4 +13,5 @@
     <string name="fb_login_protocol_scheme">fb2178539878848295</string>
     <string name="create">Create</string>
     <string name="update">Update</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

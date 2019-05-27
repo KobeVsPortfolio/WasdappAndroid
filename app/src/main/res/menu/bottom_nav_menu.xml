@@ -21,6 +21,10 @@
             android:id="@+id/navigation_account"
             android:icon="@drawable/ic_iconmonstr_user_6"
             android:title="@string/title_account"/>
+    <item
+            android:id="@+id/admin_users"
+            android:icon="@drawable/ic_multiple_users_silhouette"
+            android:title="@string/admin_users"/>
 
 </menu>
 

@@ -104,6 +104,10 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
+            when (item.itemId) {
+                R.id.admin_users ->
+                    startActivity(Intent(this, ListUsersActivity::class.java))
+            }
 
             true
         }

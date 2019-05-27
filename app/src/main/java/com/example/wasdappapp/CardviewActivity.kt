@@ -17,7 +17,10 @@ class CardviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cardview)
 
-
+        bin_button.setOnClickListener {
+            startActivity(Intent(this, BinActivity::class.java))
+            finish()
+        }
     }
 
     public override fun onStart() {

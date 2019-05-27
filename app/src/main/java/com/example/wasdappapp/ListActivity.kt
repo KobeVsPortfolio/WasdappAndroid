@@ -42,6 +42,10 @@ class ListActivity : AppCompatActivity() {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
+            when (item.itemId) {
+                R.id.admin_users ->
+                    startActivity(Intent(this, ListUsersActivity::class.java))
+            }
             true
         }
 
@@ -65,7 +69,6 @@ class ListActivity : AppCompatActivity() {
             startActivity(Intent(this, CreateActivity::class.java))
             finish()
         }
-        progressBar2.visibility
     }
 
     public override fun onStart() {
