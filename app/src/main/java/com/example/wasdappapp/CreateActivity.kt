@@ -193,10 +193,9 @@ class CreateActivity : AppCompatActivity() {
 
     private fun createImageFile(): File? {
         val timeStamp: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-        val fileName = timeStamp
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-            fileName,
+            timeStamp,
             ".jpg",
             storageDir
         ).apply { photoPath = absolutePath }
