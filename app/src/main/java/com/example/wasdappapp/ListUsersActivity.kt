@@ -54,14 +54,6 @@ class ListUsersActivity : AppCompatActivity() {
             }
         }
 
-        nav_view_admin.visibility = View.INVISIBLE
-
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
-                nav_view_admin.visibility = View.VISIBLE
-            }
-        }
 
         nav_view_admin.selectedItemId = R.id.admin_users
         nav_view_admin.setOnNavigationItemSelectedListener { item ->
@@ -140,11 +132,20 @@ class ListUsersActivity : AppCompatActivity() {
                 adapter!!.notifyDataSetChanged()
             }
     }
+
     public override fun onStart() {
         super.onStart()
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        } else {
+            userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role != "admin") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
     }
 }

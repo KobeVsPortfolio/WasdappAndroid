@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_account.nav_view as nav_view1
 
 class ChangePasswordActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private var auth = FirebaseAuth.getInstance()
     private val currentUser = auth.currentUser
     private val db = FirebaseFirestore.getInstance()
     private val userCollection = db.collection("users")
@@ -32,14 +32,12 @@ class ChangePasswordActivity : AppCompatActivity() {
             finish()
         }
 
-        nav_view.visibility = View.VISIBLE
-        nav_view_admin.visibility = View.INVISIBLE
-
         userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
             val user = document.toObject(User::class.java)
             if(user?.role == "admin"){
-                nav_view.visibility = View.INVISIBLE
                 nav_view_admin.visibility = View.VISIBLE
+            }else{
+                nav_view.visibility = View.VISIBLE
             }
         }
 

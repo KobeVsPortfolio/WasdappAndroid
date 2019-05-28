@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".ThisObjectActivity"
         android:background="@color/colorPrimary"
-android:orientation="vertical">
+        android:orientation="vertical">
     <ProgressBar
             android:layout_width="95dp"
             android:layout_height="100dp"
@@ -44,6 +44,7 @@ android:orientation="vertical">
             android:background="?android:attr/windowBackground"
             app:menu="@menu/bottom_nav_menu"
             app:layout_constraintTop_toBottomOf="@+id/rcv"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -54,6 +55,7 @@ android:orientation="vertical">
             android:background="?android:attr/windowBackground"
             app:menu="@menu/bottom_nav_menu_admin"
             app:layout_constraintTop_toBottomOf="@+id/rcv"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

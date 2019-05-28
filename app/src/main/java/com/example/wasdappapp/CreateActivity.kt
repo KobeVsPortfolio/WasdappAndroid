@@ -26,7 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_create.*
-import kotlinx.android.synthetic.main.activity_create.nav_view
 import model.WasdappEntry
 import java.io.File
 import java.io.IOException
@@ -74,17 +73,6 @@ class CreateActivity : AppCompatActivity() {
         }
         mLocationRequest = LocationRequest()
 
-        nav_view.visibility = View.VISIBLE
-        nav_view_admin.visibility = View.INVISIBLE
-
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
-                nav_view.visibility = View.INVISIBLE
-                nav_view_admin.visibility = View.VISIBLE
-            }
-        }
-
         nav_view_admin.selectedItemId = R.id.navigation_list
         nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -106,27 +94,6 @@ class CreateActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.admin_users ->
                     startActivity(Intent(this, ListUsersActivity::class.java))
-            }
-            true
-        }
-
-        nav_view.selectedItemId = R.id.navigation_list
-        nav_view.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home ->
-                    startActivity(Intent(this, MainViewActivity::class.java))
-            }
-            when (item.itemId) {
-                R.id.navigation_list ->
-                    startActivity(Intent(this, ListActivity::class.java))
-            }
-            when (item.itemId) {
-                R.id.navigation_qr_code ->
-                    startActivity(Intent(this, QrActivity::class.java))
-            }
-            when (item.itemId) {
-                R.id.navigation_account ->
-                    startActivity(Intent(this, AccountActivity::class.java))
             }
             true
         }
@@ -216,6 +183,14 @@ class CreateActivity : AppCompatActivity() {
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }else{
+            userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if(user?.role != "admin"){
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
     }
 

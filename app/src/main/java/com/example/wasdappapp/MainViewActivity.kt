@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.View.VISIBLE
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -71,9 +72,6 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
-
-
     private fun addWasdapps() {
         val db = FirebaseFirestore.getInstance()
         db.collection("wasdapps").get()
@@ -104,14 +102,12 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main_view)
 
-            nav_view.visibility = View.VISIBLE
-            nav_view_admin.visibility = View.INVISIBLE
-
             userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
                 if(user?.role == "admin"){
-                    nav_view.visibility = View.INVISIBLE
                     nav_view_admin.visibility = View.VISIBLE
+                }else{
+                    nav_view.visibility = VISIBLE
                 }
             }
 
