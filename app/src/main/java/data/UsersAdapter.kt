@@ -1,12 +1,9 @@
-
 package data
 
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +32,7 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
             val objectIsAdmin: TextView = itemView.findViewById(R.id.function_of_user) as TextView
             objectIsAdmin.text = u.role
 
-            var bin_button : Button = itemView.findViewById(R.id.bin_button_user) as Button
+            var bin_button: Button = itemView.findViewById(R.id.bin_button_user) as Button
             bin_button.setOnClickListener {
                 val deleteAlert = AlertDialog.Builder(context)
                 deleteAlert.setTitle("Delete object")
@@ -45,7 +42,8 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
                 deleteAlert.setPositiveButton("Delete") { dialogInterface: DialogInterface, i: Int ->
                     collection.document("${u.email}").delete()
                     val intent = Intent(context, ListUsersActivity::class.java)
-                    context.startActivity(intent)            }
+                    context.startActivity(intent)
+                }
 
                 deleteAlert.setNegativeButton("Cancel") { dialogInterface: DialogInterface, i: Int ->
                 }

@@ -6,11 +6,10 @@ import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.RequiresApi
+import android.support.v7.app.AppCompatActivity
 import android.util.Base64
-import android.view.View
 import android.view.View.VISIBLE
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,7 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_this_object.*
-import kotlinx.android.synthetic.main.activity_this_object.nav_view
 import model.User
 import model.WasdappEntry
 import java.io.IOException
@@ -137,7 +135,7 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
                     nav_view.visibility = VISIBLE
                 }
             }
-        }else{
+        } else {
             nav_view.visibility = VISIBLE
         }
 

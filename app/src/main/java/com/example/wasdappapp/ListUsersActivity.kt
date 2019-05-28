@@ -1,18 +1,17 @@
 package com.example.wasdappapp
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
-import android.view.View
-import android.widget.Toast
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.method.PasswordTransformationMethod
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import data.UsersAdapter
-import model.User
 import kotlinx.android.synthetic.main.activity_list_users.*
+import model.User
 
 class ListUsersActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()

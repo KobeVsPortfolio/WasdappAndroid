@@ -11,7 +11,6 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Looper
@@ -19,7 +18,7 @@ import android.provider.MediaStore
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
-import android.view.View
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
@@ -121,10 +120,10 @@ class UpdateActivity : AppCompatActivity() {
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        }else{
+        } else {
             userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
-                if(user?.role != "admin"){
+                if (user?.role != "admin") {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }
@@ -150,7 +149,7 @@ class UpdateActivity : AppCompatActivity() {
 
     }
 
-    private fun updateEntry(entry : WasdappEntry) {
+    private fun updateEntry(entry: WasdappEntry) {
         entry.name = name_update.text.toString()
         entry.locatie = location_update.text.toString()
         entry.straat = street_name_update.text.toString()
