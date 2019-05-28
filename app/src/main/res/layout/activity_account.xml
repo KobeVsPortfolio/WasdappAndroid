@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".AccountActivity"
         android:background="@color/colorPrimary"
-android:orientation="vertical">
+        android:orientation="vertical">
     <ImageView
             android:layout_width="154dp"
             android:layout_height="147dp"

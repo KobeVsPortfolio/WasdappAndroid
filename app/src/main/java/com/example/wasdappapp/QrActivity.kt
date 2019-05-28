@@ -1,31 +1,23 @@
 package com.example.wasdappapp
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Vibrator
-import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.view.View
+import android.support.v7.app.AppCompatActivity
 import android.view.View.VISIBLE
-import android.widget.TextView
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.Result
-import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_qr.*
-import kotlinx.android.synthetic.main.activity_qr.nav_view
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import me.dm7.barcodescanner.zxing.ZXingScannerView.ResultHandler
 import model.User
 import model.WasdappEntry
-import org.w3c.dom.Text
 
 
 class QrActivity : AppCompatActivity(), ResultHandler {
@@ -51,7 +43,7 @@ class QrActivity : AppCompatActivity(), ResultHandler {
                     nav_view.visibility = VISIBLE
                 }
             }
-        }else{
+        } else {
             nav_view.visibility = VISIBLE
         }
 

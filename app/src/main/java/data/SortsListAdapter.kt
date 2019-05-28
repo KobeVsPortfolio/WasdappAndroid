@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import model.User
 import model.WasdappEntry
-import java.lang.Exception
 
 
 class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val context: Context) :
@@ -38,7 +37,7 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
 
             val objectName: TextView = itemView.findViewById(R.id.name_of_object) as TextView
             objectName.text = s.name
-            val thrashButton : Button = itemView.findViewById(R.id.trash_button) as Button
+            val thrashButton: Button = itemView.findViewById(R.id.trash_button) as Button
             val objectLocation: TextView = itemView.findViewById(R.id.location_of_object) as TextView
             objectLocation.text = s.gemeente
 
@@ -46,7 +45,7 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
 
             userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
-                if(user?.role == "admin"){
+                if (user?.role == "admin") {
                     thrashButton.visibility = View.VISIBLE
                 }
             }
@@ -63,27 +62,28 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
                 context.startActivity(intent)
             }
             thrashButton.setOnClickListener {
-            val deleteAlert = AlertDialog.Builder(context)
-            deleteAlert.setTitle("Delete object")
-            deleteAlert.setMessage(
-                "Are you sure you want to delete this order?"
-            )
-            deleteAlert.setPositiveButton("Delete") { dialogInterface: DialogInterface, i: Int ->
-                collection.document("${s.id}").delete()
-                val intent = Intent(context, ListActivity::class.java)
-                context.startActivity(intent)            }
+                val deleteAlert = AlertDialog.Builder(context)
+                deleteAlert.setTitle("Delete object")
+                deleteAlert.setMessage(
+                    "Are you sure you want to delete this order?"
+                )
+                deleteAlert.setPositiveButton("Delete") { dialogInterface: DialogInterface, i: Int ->
+                    collection.document("${s.id}").delete()
+                    val intent = Intent(context, ListActivity::class.java)
+                    context.startActivity(intent)
+                }
 
-        deleteAlert.setNegativeButton("Cancel") { dialogInterface: DialogInterface, i: Int ->
-        }
+                deleteAlert.setNegativeButton("Cancel") { dialogInterface: DialogInterface, i: Int ->
+                }
 
-        val alertDialog: AlertDialog = deleteAlert.create()
-        alertDialog.show()
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.colorWarning))
-        val textView = alertDialog.findViewById<TextView>(android.R.id.message)
-        textView?.setTextColor(context.getColor(R.color.colorAccent))
-        alertDialog.window?.setBackgroundDrawableResource(R.color.colorPrimary)
+                val alertDialog: AlertDialog = deleteAlert.create()
+                alertDialog.show()
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.colorWarning))
+                val textView = alertDialog.findViewById<TextView>(android.R.id.message)
+                textView?.setTextColor(context.getColor(R.color.colorAccent))
+                alertDialog.window?.setBackgroundDrawableResource(R.color.colorPrimary)
 
-        }
+            }
     }
     }
 
@@ -108,5 +108,5 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
             return BitmapFactory.decodeResource(context.resources, R.drawable.logo_wasdap4)
         }
     }
-    }
+}
 
