@@ -73,7 +73,6 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun addWasdapps() {
-        val db = FirebaseFirestore.getInstance()
         db.collection("wasdapps").get()
             .addOnSuccessListener { task ->
                 for (document in task.documents) {

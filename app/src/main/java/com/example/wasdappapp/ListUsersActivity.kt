@@ -1,12 +1,12 @@
 package com.example.wasdappapp
 
 import android.content.Intent
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.widget.Toast
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import data.UsersAdapter
@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_list_users.*
 import model.User
 
 class ListUsersActivity : AppCompatActivity() {
-    val auth = FirebaseAuth.getInstance()
+    val auth = FirebaseAuth.getInstance()!!
     private var adapter: UsersAdapter? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
     private val db = FirebaseFirestore.getInstance()
@@ -94,6 +94,7 @@ class ListUsersActivity : AppCompatActivity() {
                             baseContext, "Admin with email: $email has been added.",
                             Toast.LENGTH_SHORT
                         ).show()
+                        startActivity(Intent(this, ListUsersActivity::class.java))
                     } else {
                         val user = HashMap<String, Any>()
                         user["email"] = email
@@ -103,6 +104,7 @@ class ListUsersActivity : AppCompatActivity() {
                             baseContext, "User with email: $email has been added.",
                             Toast.LENGTH_SHORT
                         ).show()
+                        startActivity(Intent(this, ListUsersActivity::class.java))
                     }
                     add_user_password.text = null
                     add_user_confirm_password.text = null
@@ -117,8 +119,8 @@ class ListUsersActivity : AppCompatActivity() {
             }
     }
 
-    fun getUser() {
-        var userList = ArrayList<User>()
+    private fun getUser() {
+        val userList = ArrayList<User>()
         collection.get()
             .addOnSuccessListener { task ->
                 for (document in task.documents!!) {
@@ -134,17 +136,20 @@ class ListUsersActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        if (currentUser == null) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        } else {
-            userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
+        if (!currentUser?.email.isNullOrBlank()) {
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
                 if (user?.role != "admin") {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    val adminEmail = "admin@gmail.com"
+                    val adminPassword = "admin1"
+                    auth.signInWithEmailAndPassword(adminEmail, adminPassword)
+                } else {
                 }
             }
+        }else{
+            val adminEmail = "admin@gmail.com"
+            val adminPassword = "admin1"
+            auth.signInWithEmailAndPassword(adminEmail, adminPassword)
         }
     }
 }

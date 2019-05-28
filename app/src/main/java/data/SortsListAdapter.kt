@@ -42,6 +42,12 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
             objectLocation.text = s.gemeente
 
             thrashButton.visibility = View.INVISIBLE
+            if (!currentUser?.email.isNullOrBlank()) {
+                userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                    val user = document.toObject(User::class.java)
+                    if (user?.role == "admin") {
+                        thrashButton.visibility = View.VISIBLE
+                    }
 
             userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
@@ -83,6 +89,8 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
                 textView?.setTextColor(context.getColor(R.color.colorAccent))
                 alertDialog.window?.setBackgroundDrawableResource(R.color.colorPrimary)
 
+            }
+        }
             }
     }
     }
