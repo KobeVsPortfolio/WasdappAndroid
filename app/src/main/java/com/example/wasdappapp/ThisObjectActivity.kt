@@ -24,6 +24,8 @@ import kotlinx.android.synthetic.main.activity_this_object.*
 import model.User
 import model.WasdappEntry
 import java.io.IOException
+import java.lang.Exception
+import java.util.*
 
 class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -96,6 +98,27 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         val bitmap = decoder(wasdappobj.image!!)
             photo_this_object.setImageBitmap(bitmap)
         }
+
+        var checkins: String?= ""
+            db.collection("wasdapps/${wasdappobj.id}/checkins").get().addOnSuccessListener {
+                for(i in it.documents){
+                   checkins += (" " + i["user"] + " checked in at " + i["timestamp"]+ "!!")
+                    println(checkins)
+
+                }
+                tv_checkins.text = checkins
+            }
+
+        btn_checkin.setOnClickListener {
+            val addedCheckin = HashMap<String, Any>()
+            addedCheckin.put("user", currentUser!!.email!!)
+            addedCheckin.put("timestamp", Calendar.getInstance().time)
+
+            db.collection("wasdapps/${wasdappobj.id}/checkins").add(addedCheckin).addOnSuccessListener {
+                println("write worked")
+            }
+        }
+
 
 
         val mapFragment = supportFragmentManager
