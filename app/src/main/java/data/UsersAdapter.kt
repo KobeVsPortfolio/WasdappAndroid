@@ -62,7 +62,7 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
             }
 
             editUser.setOnClickListener {
-                showDialog()
+                showDialog(u)
             }
 
 
@@ -70,36 +70,23 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
     }
 
 
-    private fun showDialog() {
-        var checkedItem = 0
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
-                checkedItem = -1
+    private fun showDialog(user : User) {
+        var checkedItem = 1
+            if(user.role == "admin"){
+                checkedItem = 0
             }
-        }
         lateinit var dialog: AlertDialog
         val array = arrayOf("Admin", "User")
         val builder = AlertDialog.Builder(context)
 
         builder.setTitle("What do you want this user to be?")
         builder.setSingleChoiceItems(array, checkedItem) { _, which ->
+            if(checkedItem == 0){
+                userCollection.document("${user.email}").get()
+            }else if(checkedItem == 1){
 
-            try {
-                Toast.makeText(
-                    context,
-                    "changed succesfully",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            } catch (e: IllegalArgumentException) {
-                Toast.makeText(
-                    context,
-                    "Something went wrong. Please try again.",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            }
+        }
+
         }
         builder.setPositiveButton("confirm") { dialogInterface: DialogInterface, i: Int ->
         }
