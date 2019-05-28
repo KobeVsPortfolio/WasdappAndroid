@@ -78,8 +78,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         login_with_email.setOnClickListener {
-            var email = email.text.toString()
-            var password = password.text.toString()
+            val email = email.text.toString()
+            val password = password.text.toString()
 
             if (!email.isBlank() && !password.isBlank()) {
                 signIn(email, password)

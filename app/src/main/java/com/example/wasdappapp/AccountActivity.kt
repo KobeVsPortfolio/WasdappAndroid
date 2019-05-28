@@ -114,7 +114,7 @@ class AccountActivity : AppCompatActivity() {
         }
     }
 
-    fun deleteAccount() {
+    private fun deleteAccount() {
         val password = EditText(this)
         password.hint = "Please enter your password."
         password.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
