@@ -42,13 +42,17 @@ class QrActivity : AppCompatActivity(), ResultHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr)
 
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
-                nav_view_admin.visibility = VISIBLE
-            }else{
-                nav_view.visibility = VISIBLE
+        if (!currentUser?.email.isNullOrBlank()) {
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role == "admin") {
+                    nav_view_admin.visibility = VISIBLE
+                } else {
+                    nav_view.visibility = VISIBLE
+                }
             }
+        }else{
+            nav_view.visibility = VISIBLE
         }
 
         nav_view_admin.selectedItemId = R.id.navigation_qr_code

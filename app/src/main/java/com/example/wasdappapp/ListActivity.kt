@@ -30,14 +30,18 @@ class ListActivity : AppCompatActivity() {
 
         add_new_object_button.hide()
 
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
-                nav_view_admin.visibility = VISIBLE
-                add_new_object_button.show()
-            }else{
-                nav_view.visibility = VISIBLE
+        if (!currentUser?.email.isNullOrBlank()) {
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role == "admin") {
+                    nav_view_admin.visibility = VISIBLE
+                    add_new_object_button.show()
+                } else {
+                    nav_view.visibility = VISIBLE
+                }
             }
+        }else{
+            nav_view.visibility = VISIBLE
         }
 
         nav_view_admin.selectedItemId = R.id.navigation_list

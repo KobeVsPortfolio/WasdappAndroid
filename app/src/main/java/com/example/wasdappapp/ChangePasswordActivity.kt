@@ -32,14 +32,19 @@ class ChangePasswordActivity : AppCompatActivity() {
             finish()
         }
 
+        if (!currentUser?.email.isNullOrBlank()) {
         userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
             val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
+            if (user?.role == "admin") {
                 nav_view_admin.visibility = View.VISIBLE
-            }else{
+            } else {
                 nav_view.visibility = View.VISIBLE
             }
         }
+    }else
+    {
+        nav_view.visibility = View.VISIBLE
+    }
 
         nav_view_admin.selectedItemId = R.id.navigation_account
         nav_view_admin.setOnNavigationItemSelectedListener { item ->
