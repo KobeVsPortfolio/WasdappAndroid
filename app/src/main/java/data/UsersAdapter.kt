@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -83,12 +84,25 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
         builder.setSingleChoiceItems(array, checkedItem) { _, which ->
             if(checkedItem == 0){
                 userCollection.document("${user.email}").get()
+                //db.collection("users").document("${user.email}")
+                userCollection.document("${user.email}")
+                    .update(mapOf(
+                        "role" to "user"
+                    ))
+
             }else if(checkedItem == 1){
+                userCollection.document("${user.email}").get()
+                userCollection.document("${user.email}")
+                    .update(mapOf(
+                        "role" to "admin"
+                    ))
 
         }
 
         }
         builder.setPositiveButton("confirm") { dialogInterface: DialogInterface, i: Int ->
+            val intent = Intent(context, ListUsersActivity::class.java)
+            context.startActivity(intent)
         }
         builder.setNegativeButton("cancel") { dialogInterface: DialogInterface, i: Int ->
         }
