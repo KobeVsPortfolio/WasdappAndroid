@@ -4,31 +4,32 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.support.v7.widget.RecyclerView
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.example.wasdappapp.ListActivity
+import com.example.wasdappapp.ListUsersActivity
 import com.example.wasdappapp.R
-import com.example.wasdappapp.ThisObjectActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import model.User
-import model.WasdappEntry
-import java.lang.Exception
+
 
 class UsersAdapter(private val list: ArrayList<User>, private val context: Context) :
     RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
 
+    val auth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
+    val collection = db.collection("users")
+    val userCollection = db.collection("users")
+    val currentUser = auth.currentUser
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItem(u: User) {
-            var editUser: Button = itemView.findViewById(R.id.edit_user) as Button
+            val editUser: Button = itemView.findViewById(R.id.edit_user) as Button
             val objectName: TextView = itemView.findViewById(R.id.name_of_user) as TextView
             objectName.text = u.email
             println("writing in adapter")
@@ -36,46 +37,74 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
             val objectIsAdmin: TextView = itemView.findViewById(R.id.function_of_user) as TextView
             objectIsAdmin.text = u.role
 
-            /*itemView.findViewById(R.id.bin_button).setOnClickListener {
+            val binButton: Button = itemView.findViewById(R.id.bin_button_user) as Button
+            binButton.setOnClickListener {
+                val deleteAlert = AlertDialog.Builder(context)
+                deleteAlert.setTitle("Delete object")
+                deleteAlert.setMessage(
+                    "Are you sure you want to delete this user?"
+                )
+                deleteAlert.setPositiveButton("Delete") { dialogInterface: DialogInterface, i: Int ->
+                    collection.document("${u.email}").delete()
+                    val intent = Intent(context, ListUsersActivity::class.java)
+                    context.startActivity(intent)
+                }
 
-            }*/
+                deleteAlert.setNegativeButton("Cancel") { dialogInterface: DialogInterface, i: Int ->
+                }
+
+                val alertDialog: AlertDialog = deleteAlert.create()
+                alertDialog.show()
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getColor(R.color.colorWarning))
+                val textView = alertDialog.findViewById<TextView>(android.R.id.message)
+                textView?.setTextColor(context.getColor(R.color.colorAccent))
+                alertDialog.window?.setBackgroundDrawableResource(R.color.colorPrimary)
+            }
+
             editUser.setOnClickListener {
                 showDialog()
             }
-        }
 
+
+        }
     }
 
+
     private fun showDialog() {
+        var checkedItem = 0
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+            if(user?.role == "admin"){
+                checkedItem = -1
+            }
+        }
         lateinit var dialog: AlertDialog
         val array = arrayOf("Admin", "User")
         val builder = AlertDialog.Builder(context)
-        var checkedItem : Int = -1
+
         builder.setTitle("What do you want this user to be?")
         builder.setSingleChoiceItems(array, checkedItem) { _, which ->
 
-                try {
-                    Toast.makeText(
-                        context,
-                        "changed succesfully",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                } catch (e: IllegalArgumentException) {
-                    Toast.makeText(
-                        context,
-                        "Something went wrong. Please try again.",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
+            try {
+                Toast.makeText(
+                    context,
+                    "changed succesfully",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            } catch (e: IllegalArgumentException) {
+                Toast.makeText(
+                    context,
+                    "Something went wrong. Please try again.",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
-            builder.setPositiveButton("confirm") { dialogInterface: DialogInterface, i: Int ->
-            }
-            builder.setNegativeButton("cancel") { dialogInterface: DialogInterface, i: Int ->
-            }
-
-
+        }
+        builder.setPositiveButton("confirm") { dialogInterface: DialogInterface, i: Int ->
+        }
+        builder.setNegativeButton("cancel") { dialogInterface: DialogInterface, i: Int ->
+        }
 
 
         // Initialize the AlertDialog using builder object
@@ -98,5 +127,7 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
     override fun onBindViewHolder(p0: UsersAdapter.ViewHolder, p1: Int) {
         p0.bindItem(list[p1])
     }
-
 }
+
+
+

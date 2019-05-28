@@ -26,7 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_create.*
-import kotlinx.android.synthetic.main.activity_create.nav_view
 import model.WasdappEntry
 import java.io.File
 import java.io.IOException
@@ -37,7 +36,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.ProgressBar
+import model.User
 import java.io.ByteArrayOutputStream
 
 
@@ -45,6 +44,8 @@ class CreateActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     val collection = db.collection("wasdapps")
+    private val currentUser = auth.currentUser
+    private val userCollection = db.collection("users")
     var latLong: LatLng? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private val INTERVAL: Long = 2000
@@ -67,14 +68,13 @@ class CreateActivity : AppCompatActivity() {
         progressBar.bringToFront()
         progressBar.visibility = View.INVISIBLE
 
-        nav_view.selectedItemId = R.id.navigation_list
-
         if (checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
         mLocationRequest = LocationRequest()
 
-        nav_view.setOnNavigationItemSelectedListener { item ->
+        nav_view_admin.selectedItemId = R.id.navigation_list
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
@@ -95,10 +95,9 @@ class CreateActivity : AppCompatActivity() {
                 R.id.admin_users ->
                     startActivity(Intent(this, ListUsersActivity::class.java))
             }
-
             true
-
         }
+
         cancel_button2.setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))
             finish()
@@ -181,10 +180,17 @@ class CreateActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }else{
+            userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if(user?.role != "admin"){
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
     }
 

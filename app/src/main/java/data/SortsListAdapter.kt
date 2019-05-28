@@ -6,9 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Typeface
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Base64
 import android.view.LayoutInflater
@@ -22,6 +19,7 @@ import com.example.wasdappapp.R
 import com.example.wasdappapp.ThisObjectActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import model.User
 import model.WasdappEntry
 import java.lang.Exception
 
@@ -32,15 +30,26 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     val collection = db.collection("wasdapps")
+    val userCollection = db.collection("users")
+    val currentUser = auth.currentUser
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItem(s: WasdappEntry) {
 
             val objectName: TextView = itemView.findViewById(R.id.name_of_object) as TextView
             objectName.text = s.name
-            var trash_button : Button = itemView.findViewById(R.id.trash_button) as Button
+            val thrashButton : Button = itemView.findViewById(R.id.trash_button) as Button
             val objectLocation: TextView = itemView.findViewById(R.id.location_of_object) as TextView
             objectLocation.text = s.gemeente
+
+            thrashButton.visibility = View.INVISIBLE
+
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if(user?.role == "admin"){
+                    thrashButton.visibility = View.VISIBLE
+                }
+            }
 
             if (s.image != null) {
                 val bitmap = decoder(s.image!!)
@@ -53,7 +62,7 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
                 intent.putExtra("wasdappobj", s)
                 context.startActivity(intent)
             }
-            trash_button.setOnClickListener {
+            thrashButton.setOnClickListener {
             val deleteAlert = AlertDialog.Builder(context)
             deleteAlert.setTitle("Delete object")
             deleteAlert.setMessage(

@@ -19,15 +19,15 @@ import android.provider.MediaStore
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import kotlinx.android.synthetic.main.activity_create.*
 import kotlinx.android.synthetic.main.activity_update.*
-import kotlinx.android.synthetic.main.activity_update.nav_view
+import model.User
 import model.WasdappEntry
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -41,6 +41,8 @@ class UpdateActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     val collection = db.collection("wasdapps")
+    private val currentUser = auth.currentUser
+    private val userCollection = db.collection("users")
     var latLong: LatLng? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private val INTERVAL: Long = 2000
@@ -54,7 +56,6 @@ class UpdateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update)
-        nav_view.selectedItemId = R.id.navigation_list
 
         if (checkPermissionForLocation(this)) {
             startLocationUpdates()
@@ -75,11 +76,11 @@ class UpdateActivity : AppCompatActivity() {
         email_update.setText(wasdappobj.email)
         location_update.setText(wasdappobj.locatie)
 
-        nav_view.setOnNavigationItemSelectedListener { item ->
+        nav_view_admin.selectedItemId = R.id.navigation_list
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
-
             }
             when (item.itemId) {
                 R.id.navigation_list ->
@@ -97,10 +98,9 @@ class UpdateActivity : AppCompatActivity() {
                 R.id.admin_users ->
                     startActivity(Intent(this, ListUsersActivity::class.java))
             }
-
             true
-
         }
+
         cancel_button.setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))
             finish()
@@ -118,10 +118,17 @@ class UpdateActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }else{
+            userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if(user?.role != "admin"){
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
     }
 

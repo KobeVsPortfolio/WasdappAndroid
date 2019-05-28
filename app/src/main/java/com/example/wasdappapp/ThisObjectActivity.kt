@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.util.Base64
+import android.view.View
+import android.view.View.VISIBLE
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -18,8 +20,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_this_object.*
 import kotlinx.android.synthetic.main.activity_this_object.nav_view
+import model.User
 import model.WasdappEntry
 import java.io.IOException
 import java.lang.Exception
@@ -27,6 +31,11 @@ import java.lang.Exception
 class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+
+    val auth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
+    private val currentUser = auth.currentUser
+    private val userCollection = db.collection("users")
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -68,14 +77,12 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         return addressText
     }
 
-
-    val auth = FirebaseAuth.getInstance()
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_this_object)
-        nav_view.selectedItemId = R.id.navigation_list
+
+        update_object_button.hide()
 
         val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
@@ -98,7 +105,18 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        nav_view.setOnNavigationItemSelectedListener { item ->
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+            if(user?.role == "admin"){
+                nav_view_admin.visibility = VISIBLE
+                update_object_button.show()
+            }else{
+                nav_view.visibility = VISIBLE
+            }
+        }
+
+        nav_view_admin.selectedItemId = R.id.navigation_list
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
@@ -121,6 +139,27 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             true
         }
+
+        nav_view.selectedItemId = R.id.navigation_list
+        nav_view.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
+            }
+            true
+        }
         update_object_button.setOnClickListener {
             val intent = Intent(this, UpdateActivity::class.java)
             intent.putExtra("wasdappobj", wasdappobj)
@@ -131,7 +170,6 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

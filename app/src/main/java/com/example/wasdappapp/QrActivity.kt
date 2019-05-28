@@ -12,16 +12,18 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.Result
 import com.google.zxing.integration.android.IntentIntegrator
-import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_qr.*
 import kotlinx.android.synthetic.main.activity_qr.nav_view
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import me.dm7.barcodescanner.zxing.ZXingScannerView.ResultHandler
+import model.User
 import model.WasdappEntry
 import org.w3c.dom.Text
 
@@ -30,14 +32,27 @@ class QrActivity : AppCompatActivity(), ResultHandler {
 
     private val REQUEST_CAMERA = 1
     private var scannerView: ZXingScannerView? = null
+    val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     val collection = db.collection("wasdapps")
+    private val currentUser = auth.currentUser
+    private val userCollection = db.collection("users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr)
-        nav_view.selectedItemId = R.id.navigation_qr_code
-        nav_view.setOnNavigationItemSelectedListener { item ->
+
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+            if(user?.role == "admin"){
+                nav_view_admin.visibility = VISIBLE
+            }else{
+                nav_view.visibility = VISIBLE
+            }
+        }
+
+        nav_view_admin.selectedItemId = R.id.navigation_qr_code
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
@@ -45,7 +60,6 @@ class QrActivity : AppCompatActivity(), ResultHandler {
             when (item.itemId) {
                 R.id.navigation_list ->
                     startActivity(Intent(this, ListActivity::class.java))
-
             }
             when (item.itemId) {
                 R.id.navigation_qr_code ->
@@ -58,6 +72,27 @@ class QrActivity : AppCompatActivity(), ResultHandler {
             when (item.itemId) {
                 R.id.admin_users ->
                     startActivity(Intent(this, ListUsersActivity::class.java))
+            }
+            true
+        }
+
+        nav_view.selectedItemId = R.id.navigation_qr_code
+        nav_view.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
             }
             true
         }
@@ -127,6 +162,14 @@ class QrActivity : AppCompatActivity(), ResultHandler {
         builder.setMessage(result)
         val alert = builder.create()
         alert.show()
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        if (currentUser == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
 
