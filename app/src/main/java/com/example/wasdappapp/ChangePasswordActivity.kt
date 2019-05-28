@@ -1,8 +1,8 @@
 package com.example.wasdappapp
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.widget.Toast
@@ -33,18 +33,17 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
 
         if (!currentUser?.email.isNullOrBlank()) {
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if (user?.role == "admin") {
-                nav_view_admin.visibility = View.VISIBLE
-            } else {
-                nav_view.visibility = View.VISIBLE
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role == "admin") {
+                    nav_view_admin.visibility = View.VISIBLE
+                } else {
+                    nav_view.visibility = View.VISIBLE
+                }
             }
+        } else {
+            nav_view.visibility = View.VISIBLE
         }
-    }else
-    {
-        nav_view.visibility = View.VISIBLE
-    }
 
         nav_view_admin.selectedItemId = R.id.navigation_account
         nav_view_admin.setOnNavigationItemSelectedListener { item ->

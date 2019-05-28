@@ -10,8 +10,8 @@ import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import data.UsersAdapter
-import model.User
 import kotlinx.android.synthetic.main.activity_list_users.*
+import model.User
 
 class ListUsersActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()!!

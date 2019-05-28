@@ -1,23 +1,27 @@
 package com.example.wasdappapp
 
-import android.app.Activity
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.os.Build
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.support.v7.app.AppCompatActivity
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Looper
 import android.provider.MediaStore
 import android.support.annotation.RequiresApi
-import android.support.v4.content.FileProvider
-import android.os.Looper
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
+import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
@@ -26,18 +30,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_create.*
+import model.User
 import model.WasdappEntry
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import android.graphics.Bitmap
-import android.net.Uri
-import android.support.v4.content.ContextCompat
-import android.view.View
-import model.User
-import java.io.ByteArrayOutputStream
 
 
 class CreateActivity : AppCompatActivity() {
@@ -183,10 +183,10 @@ class CreateActivity : AppCompatActivity() {
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        }else{
+        } else {
             userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
-                if(user?.role != "admin"){
+                if (user?.role != "admin") {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 }
@@ -420,7 +420,6 @@ class CreateActivity : AppCompatActivity() {
             Looper.myLooper()
         )
     }
-
 
 
 }

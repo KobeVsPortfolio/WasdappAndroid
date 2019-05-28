@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import model.User
 import model.WasdappEntry
-import java.lang.Exception
 
 
 class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val context: Context) :
@@ -49,6 +48,11 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
                     if (user?.role == "admin") {
                         thrashButton.visibility = View.VISIBLE
                     }
+
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role == "admin") {
+                    thrashButton.visibility = View.VISIBLE
                 }
             }
 
@@ -87,6 +91,8 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
 
             }
         }
+            }
+    }
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SortsListAdapter.ViewHolder {

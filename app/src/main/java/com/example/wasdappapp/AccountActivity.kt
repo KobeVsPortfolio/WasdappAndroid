@@ -2,20 +2,17 @@ package com.example.wasdappapp
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
-import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_account.*
 import model.User
@@ -40,7 +37,7 @@ class AccountActivity : AppCompatActivity() {
                     nav_view.visibility = View.VISIBLE
                 }
             }
-        }else{
+        } else {
             nav_view.visibility = View.VISIBLE
         }
 

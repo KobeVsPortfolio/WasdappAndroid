@@ -1,7 +1,7 @@
 package com.example.wasdappapp
 
-import android.content.pm.PackageManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.ActivityCompat
@@ -17,11 +17,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import model.MyClusterItem
-import model.WasdappEntry
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.android.synthetic.main.activity_main_view.*
+import model.MyClusterItem
 import model.User
+import model.WasdappEntry
 
 class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
 

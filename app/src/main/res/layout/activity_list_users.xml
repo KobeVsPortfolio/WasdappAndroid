@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         tools:context=".ListUsersActivity"
         android:background="@color/colorPrimary"
-android:orientation="vertical">
+        android:orientation="vertical">
     <android.support.design.widget.BottomNavigationView
             android:id="@+id/nav_view_admin"
             android:layout_width="match_parent"
