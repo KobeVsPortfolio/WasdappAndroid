@@ -5,17 +5,23 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import data.SortsListAdapter
 import kotlinx.android.synthetic.main.activity_list.*
-import kotlinx.android.synthetic.main.activity_list.nav_view
 import model.WasdappEntry
 
 class ListActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
     private var adapter: SortsListAdapter? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
+    var next: Query? = null
+    var lastVisible: DocumentSnapshot? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +51,21 @@ class ListActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
 
+
         var sortList = ArrayList<WasdappEntry>()
-        db.collection("wasdapps").get()
+        val first = db.collection("wasdapps").limit(5)
+        first.get()
             .addOnSuccessListener { task ->
+
+                lastVisible = task.documents[task.size() - 1]
+                next = db.collection("wasdapps")
+                    .startAfter(lastVisible!!)
+                    .limit(5)
+
                 for (document in task.documents!!) {
                     sortList.add(document.toObject(WasdappEntry::class.java)!!)
                 }
+
                 layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
                 adapter = SortsListAdapter(sortList!!, this)
 
@@ -59,10 +74,49 @@ class ListActivity : AppCompatActivity() {
                 adapter!!.notifyDataSetChanged()
             }
 
-        add_new_object_button.setOnClickListener {
-            startActivity(Intent(this, CreateActivity::class.java))
-            finish()
-        }
+        btn_more.setOnClickListener {
+                next!!.get()
+                    .addOnSuccessListener { task ->
+                        if(!task.isEmpty){
+                        //if (task.documents[task.size() - 1].exists()) {
+
+                            lastVisible = task.documents[task.size() - 1]
+                            next = db.collection("wasdapps")
+                                .startAfter(lastVisible!!)
+                                .limit(5)
+                            for (document in task.documents!!) {
+                                sortList.add(document.toObject(WasdappEntry::class.java)!!)
+                            }
+                        } else if(task.isEmpty){
+                            btn_more.text = "Go to top"
+                        }
+                        rcv.layoutManager = layoutManager
+                        rcv.adapter = adapter
+                        adapter!!.notifyDataSetChanged()
+                    }
+            }
+
+        btn_more.visibility = View.GONE
+        rcv.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if(!rcv.canScrollVertically(1)){
+                    println("Last item.... ")
+                    btn_more.visibility = View.VISIBLE
+                }else{
+                    btn_more.visibility = View.GONE
+                }
+
+            }
+        })
+
+            add_new_object_button.setOnClickListener {
+                startActivity(Intent(this, CreateActivity::class.java))
+                finish()
+            }
+
     }
 
     public override fun onStart() {
