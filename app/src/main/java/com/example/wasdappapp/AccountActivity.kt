@@ -31,14 +31,17 @@ class AccountActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
-
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
-                nav_view_admin.visibility = View.VISIBLE
-            }else{
-                nav_view.visibility = View.VISIBLE
+        if (!currentUser?.email.isNullOrBlank()) {
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role == "admin") {
+                    nav_view_admin.visibility = View.VISIBLE
+                } else {
+                    nav_view.visibility = View.VISIBLE
+                }
             }
+        }else{
+            nav_view.visibility = View.VISIBLE
         }
 
         delete_account.setOnClickListener {

@@ -48,7 +48,7 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
         mClusterManager = ClusterManager<MyClusterItem>(this, mMap)
         mMap.setOnCameraIdleListener(mClusterManager)
         mMap.setOnMarkerClickListener(mClusterManager)
-        mMap.setOnInfoWindowClickListener (mClusterManager)
+        mMap.setOnInfoWindowClickListener(mClusterManager)
 
         addWasdapps()
         if (ActivityCompat.checkSelfPermission(
@@ -90,78 +90,81 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         mClusterManager!!.setOnClusterItemInfoWindowClickListener {
-                val intent = Intent(this, ThisObjectActivity::class.java)
-                intent.putExtra("wasdappobj", it.mTag as Parcelable)
-                startActivity(intent)
+            val intent = Intent(this, ThisObjectActivity::class.java)
+            intent.putExtra("wasdappobj", it.mTag as Parcelable)
+            startActivity(intent)
 
         }
     }
 
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main_view)
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main_view)
+        if (!currentUser?.email.isNullOrBlank()) {
             userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
-                if(user?.role == "admin"){
+                if (user?.role == "admin") {
                     nav_view_admin.visibility = View.VISIBLE
-                }else{
+                } else {
                     nav_view.visibility = VISIBLE
                 }
             }
-
-            nav_view_admin.selectedItemId = R.id.navigation_home
-            nav_view_admin.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.navigation_home ->
-                        startActivity(Intent(this, MainViewActivity::class.java))
-                }
-                when (item.itemId) {
-                    R.id.navigation_list ->
-                        startActivity(Intent(this, ListActivity::class.java))
-                }
-                when (item.itemId) {
-                    R.id.navigation_qr_code ->
-                        startActivity(Intent(this, QrActivity::class.java))
-                }
-                when (item.itemId) {
-                    R.id.navigation_account ->
-                        startActivity(Intent(this, AccountActivity::class.java))
-                }
-                when (item.itemId) {
-                    R.id.admin_users ->
-                        startActivity(Intent(this, ListUsersActivity::class.java))
-                }
-                true
-            }
-
-            nav_view.selectedItemId = R.id.navigation_home
-            nav_view.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.navigation_home ->
-                        startActivity(Intent(this, MainViewActivity::class.java))
-                }
-                when (item.itemId) {
-                    R.id.navigation_list ->
-                        startActivity(Intent(this, ListActivity::class.java))
-                }
-                when (item.itemId) {
-                    R.id.navigation_qr_code ->
-                        startActivity(Intent(this, QrActivity::class.java))
-                }
-                when (item.itemId) {
-                    R.id.navigation_account ->
-                        startActivity(Intent(this, AccountActivity::class.java))
-                }
-                true
-            }
-
-            val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        } else {
+            nav_view.visibility = VISIBLE
         }
+
+        nav_view_admin.selectedItemId = R.id.navigation_home
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.admin_users ->
+                    startActivity(Intent(this, ListUsersActivity::class.java))
+            }
+            true
+        }
+
+        nav_view.selectedItemId = R.id.navigation_home
+        nav_view.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home ->
+                    startActivity(Intent(this, MainViewActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_list ->
+                    startActivity(Intent(this, ListActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_qr_code ->
+                    startActivity(Intent(this, QrActivity::class.java))
+            }
+            when (item.itemId) {
+                R.id.navigation_account ->
+                    startActivity(Intent(this, AccountActivity::class.java))
+            }
+            true
+        }
+
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+    }
 
     public override fun onStart() {
         super.onStart()
@@ -170,6 +173,6 @@ class MainViewActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
     }
-    }
+}
 
 
