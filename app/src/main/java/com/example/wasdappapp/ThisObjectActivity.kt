@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.util.Base64
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -81,6 +82,8 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_this_object)
 
+        update_object_button.hide()
+
         val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         name_of_this_object.text = wasdappobj.name
@@ -102,14 +105,13 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        nav_view.visibility = View.VISIBLE
-        nav_view_admin.visibility = View.INVISIBLE
-
         userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
             val user = document.toObject(User::class.java)
             if(user?.role == "admin"){
-                nav_view.visibility = View.INVISIBLE
-                nav_view_admin.visibility = View.VISIBLE
+                nav_view_admin.visibility = VISIBLE
+                update_object_button.show()
+            }else{
+                nav_view.visibility = VISIBLE
             }
         }
 

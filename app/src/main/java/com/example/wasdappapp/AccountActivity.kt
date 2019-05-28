@@ -32,6 +32,15 @@ class AccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
+        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+            val user = document.toObject(User::class.java)
+            if(user?.role == "admin"){
+                nav_view_admin.visibility = View.VISIBLE
+            }else{
+                nav_view.visibility = View.VISIBLE
+            }
+        }
+
         delete_account.setOnClickListener {
             deleteAccount()
         }
@@ -40,17 +49,6 @@ class AccountActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        }
-
-        nav_view.visibility = View.VISIBLE
-        nav_view_admin.visibility = View.INVISIBLE
-
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-                if(user?.role == "admin"){
-                    nav_view.visibility = View.INVISIBLE
-                    nav_view_admin.visibility = View.VISIBLE
-                }
         }
 
         nav_view_admin.selectedItemId = R.id.navigation_account

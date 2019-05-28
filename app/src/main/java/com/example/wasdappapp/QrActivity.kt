@@ -12,6 +12,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -40,14 +41,13 @@ class QrActivity : AppCompatActivity(), ResultHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qr)
-        nav_view.visibility = View.VISIBLE
-        nav_view_admin.visibility = View.INVISIBLE
 
         userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
             val user = document.toObject(User::class.java)
             if(user?.role == "admin"){
-                nav_view.visibility = View.INVISIBLE
-                nav_view_admin.visibility = View.VISIBLE
+                nav_view_admin.visibility = VISIBLE
+            }else{
+                nav_view.visibility = VISIBLE
             }
         }
 

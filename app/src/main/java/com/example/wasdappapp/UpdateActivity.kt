@@ -76,17 +76,6 @@ class UpdateActivity : AppCompatActivity() {
         email_update.setText(wasdappobj.email)
         location_update.setText(wasdappobj.locatie)
 
-        nav_view.visibility = View.VISIBLE
-        nav_view_admin.visibility = View.INVISIBLE
-
-        userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
-            val user = document.toObject(User::class.java)
-            if(user?.role == "admin"){
-                nav_view.visibility = View.INVISIBLE
-                nav_view_admin.visibility = View.VISIBLE
-            }
-        }
-
         nav_view_admin.selectedItemId = R.id.navigation_list
         nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -112,26 +101,6 @@ class UpdateActivity : AppCompatActivity() {
             true
         }
 
-        nav_view.selectedItemId = R.id.navigation_list
-        nav_view.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home ->
-                    startActivity(Intent(this, MainViewActivity::class.java))
-            }
-            when (item.itemId) {
-                R.id.navigation_list ->
-                    startActivity(Intent(this, ListActivity::class.java))
-            }
-            when (item.itemId) {
-                R.id.navigation_qr_code ->
-                    startActivity(Intent(this, QrActivity::class.java))
-            }
-            when (item.itemId) {
-                R.id.navigation_account ->
-                    startActivity(Intent(this, AccountActivity::class.java))
-            }
-            true
-        }
         cancel_button.setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))
             finish()
@@ -152,6 +121,14 @@ class UpdateActivity : AppCompatActivity() {
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }else{
+            userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if(user?.role != "admin"){
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
     }
 
