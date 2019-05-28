@@ -1,3 +1,4 @@
+
 package data
 
 import android.app.AlertDialog
@@ -128,6 +129,7 @@ class UsersAdapter(private val list: ArrayList<User>, private val context: Conte
     override fun onBindViewHolder(p0: UsersAdapter.ViewHolder, p1: Int) {
         p0.bindItem(list[p1])
     }
+
 }
 
 

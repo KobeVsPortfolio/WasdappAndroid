@@ -110,5 +110,5 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
             return BitmapFactory.decodeResource(context.resources, R.drawable.logo_wasdap4)
         }
     }
-}
+    }
 

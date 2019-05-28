@@ -20,6 +20,7 @@ class MyClusterItem(lat: Double, lng: Double, title: String, tag: WasdappEntry) 
     override fun getTitle(): String {
         return mTitle
     }
+
     override fun getSnippet(): String {
         return ""
     }
