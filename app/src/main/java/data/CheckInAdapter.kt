@@ -26,6 +26,8 @@ class CheckInAdapter(private val list: ArrayList<CheckIn>, private val context: 
             val user: TextView = itemView.findViewById(R.id.user) as TextView
             val time: TextView = itemView.findViewById(R.id.timestamp) as TextView
 
+            user.text = checkIn.userId
+            time.text = checkIn.timestamp.toString()
         }
     }
 

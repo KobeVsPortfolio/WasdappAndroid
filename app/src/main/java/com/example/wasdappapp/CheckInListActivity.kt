@@ -1,15 +1,15 @@
 package com.example.wasdappapp
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import data.CheckInAdapter
-import data.SortsListAdapter
-import kotlinx.android.synthetic.main.activity_list.*
-import kotlinx.android.synthetic.main.activity_this_object.*
+import kotlinx.android.synthetic.main.activity_check_in_list.*
 import model.CheckIn
 import model.WasdappEntry
 import java.util.*
@@ -30,10 +30,10 @@ class CheckInListActivity : AppCompatActivity() {
         val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         val checkInList: ArrayList<CheckIn> = ArrayList()
-        db.collection("wasdapps/${wasdappobj.id}/checkins").get().addOnSuccessListener {
-            for(i in it.documents){
-                i.toObject(CheckIn::class.java)
-                checkInList.plus(i)
+        db.collection("wasdapps/${wasdappobj.id}/checkins").get().addOnSuccessListener { task ->
+            for(i in task.documents){
+                val checkIn = i.toObject(CheckIn::class.java)
+                checkInList.add(checkIn!!)
                 layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
                 adapter = CheckInAdapter(checkInList, this)
 
@@ -48,6 +48,10 @@ class CheckInListActivity : AppCompatActivity() {
             addedCheckin.userId = currentUser!!.email!!
             addedCheckin.timestamp = Calendar.getInstance().time
             db.collection("wasdapps/${wasdappobj.id}/checkins").add(addedCheckin).addOnSuccessListener {
+                Toast.makeText(this, "Checked in!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, CheckInListActivity::class.java)
+                intent.putExtra("wasdappobj", wasdappobj)
+                startActivity(intent)
             }
         }
     }
