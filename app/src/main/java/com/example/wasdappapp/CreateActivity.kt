@@ -1,23 +1,27 @@
 package com.example.wasdappapp
 
-import android.app.Activity
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.os.Build
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.support.v7.app.AppCompatActivity
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Looper
 import android.provider.MediaStore
 import android.support.annotation.RequiresApi
-import android.support.v4.content.FileProvider
-import android.os.Looper
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
+import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
@@ -26,21 +30,22 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_create.*
-import kotlinx.android.synthetic.main.activity_create.nav_view
+import model.User
 import model.WasdappEntry
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import android.graphics.Bitmap
-import java.io.ByteArrayOutputStream
 
 
 class CreateActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     val collection = db.collection("wasdapps")
+    private val currentUser = auth.currentUser
+    private val userCollection = db.collection("users")
     var latLong: LatLng? = null
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private val INTERVAL: Long = 2000
@@ -50,18 +55,26 @@ class CreateActivity : AppCompatActivity() {
 
     lateinit var photoPath: String
     val REQUEST_TAKE_PHOTO = 1
+    val IMAGE_PICK_REQUEST = 2
+    val KEY_IMAGE_URI = "imageUri"
+    private val PERMISSION_REQUEST_CODE: Int = 101
+
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
-        nav_view.selectedItemId = R.id.navigation_list
+
+        progressBar.bringToFront()
+        progressBar.visibility = View.INVISIBLE
 
         if (checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
         mLocationRequest = LocationRequest()
 
-        nav_view.setOnNavigationItemSelectedListener { item ->
+        nav_view_admin.selectedItemId = R.id.navigation_list
+        nav_view_admin.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home ->
                     startActivity(Intent(this, MainViewActivity::class.java))
@@ -78,10 +91,13 @@ class CreateActivity : AppCompatActivity() {
                 R.id.navigation_account ->
                     startActivity(Intent(this, AccountActivity::class.java))
             }
-
+            when (item.itemId) {
+                R.id.admin_users ->
+                    startActivity(Intent(this, ListUsersActivity::class.java))
+            }
             true
-
         }
+
         cancel_button2.setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))
             finish()
@@ -92,9 +108,58 @@ class CreateActivity : AppCompatActivity() {
             createEntry()
         }
         photo.setOnClickListener {
-            takePicture()
+            if (checkPermission()) takePicture() else requestPermission()
         }
 
+
+        upload.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).also { it.type = "image/*" }
+            startActivityForResult(intent, IMAGE_PICK_REQUEST)
+        }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_IMAGE_URI)) {
+            imageUri = savedInstanceState.getParcelable(KEY_IMAGE_URI) as Uri
+            imageUri?.let { loadAndShowPhoto(it) }
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                ) {
+
+                    takePicture()
+
+                } else {
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+
+            else -> {
+
+            }
+        }
+    }
+
+    private fun checkPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA),
+            PERMISSION_REQUEST_CODE
+        )
     }
 
     private fun handleLocation() {
@@ -109,14 +174,23 @@ class CreateActivity : AppCompatActivity() {
             latLong =
                 getLatLongFromAdress(postal_code.text.toString() + " " + town.text.toString() + ", " + street_name.text.toString() + " " + house_number.text.toString() + ", " + country.text.toString())
         }
+
+
     }
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
         if (currentUser == null) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        } else {
+            userCollection.document("${currentUser.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role != "admin") {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
     }
 
@@ -181,6 +255,14 @@ class CreateActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_PICK_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            imageUri = data.data
+            loadAndShowPhoto(data.data)
+
+
+        }
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             val base64 = encoder(photoPath)
             photo.setTextKeepState(base64)
@@ -191,12 +273,38 @@ class CreateActivity : AppCompatActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        if (outState != null && imageUri != null) {
+            outState.putParcelable(KEY_IMAGE_URI, imageUri)
+        }
+    }
+
+    private fun loadAndShowPhoto(uri: Uri) {
+        progressBar.visibility = View.VISIBLE
+        load {
+            MediaStore.Images.Media.getBitmap(contentResolver, uri)
+
+        } then {
+            val resizedBitmap = resizeBitmap(it, 512, 512)
+            photoImage.setImageBitmap(resizedBitmap)
+            progressBar.visibility = View.INVISIBLE
+
+            val byteArrayOutputStream = ByteArrayOutputStream();
+            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            val byteArray = byteArrayOutputStream.toByteArray()
+            val encoded = Base64.getEncoder().encodeToString(byteArray)
+            photo.setTextKeepState(encoded)
+            photo.textSize = 0f
+
+        }
+    }
+
     private fun createImageFile(): File? {
         val timeStamp: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))
-        val fileName = timeStamp
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-            fileName,
+            timeStamp,
             ".jpg",
             storageDir
         ).apply { photoPath = absolutePath }
@@ -219,7 +327,6 @@ class CreateActivity : AppCompatActivity() {
             height,
             false
         )
-
     }
 
 
@@ -312,6 +419,7 @@ class CreateActivity : AppCompatActivity() {
             Looper.myLooper()
         )
     }
+
 
 }
 

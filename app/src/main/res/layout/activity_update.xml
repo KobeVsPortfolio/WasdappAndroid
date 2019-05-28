@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".UpdateActivity"
-android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
     <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +34,7 @@ android:background="@color/colorPrimary">
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
                     android:text="@string/update"
-                    android:textSize="40dp"
+                    android:textSize="40sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorAccent"
                     android:layout_marginHorizontal="140dp"
@@ -43,47 +44,50 @@ android:background="@color/colorPrimary">
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginHorizontal="110dp">
+                    android:layout_marginHorizontal="110dp"
+                    android:layout_gravity="center"
+                    android:gravity="center">
                 <Button
-                        android:id="@+id/photo"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        android:id="@+id/photoUpdate"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:drawableTop="@drawable/ic_camera2"
-                        android:background="@drawable/round_bg"
-                        android:backgroundTint="@color/colorAccent2"
-                        android:text="photo"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_camera2"
                         android:padding="5dp"
-                        android:layout_marginRight="10dp"
-                        android:maxLines="1"
-                />
+                        android:layout_marginEnd="10dp"
+                        android:maxLines="1"/>
                 <Button
-                        android:id="@+id/upload"
-                        android:layout_width="90dp"
-                        android:layout_height="50dp"
+                        android:id="@+id/uploadUpdate"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:drawableTop="@drawable/ic_iconmonstr_upload_17"
-                        android:background="@drawable/round_bg"
-                        android:backgroundTint="@color/colorAccent2"
-                        android:text="upload"
+                        android:background="@drawable/ic_iconmonstr_upload_17"
                         android:padding="5dp"
                         android:maxLines="1"
 
                 />
             </LinearLayout>
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/photoUpdateImage"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"/>
             <EditText
                     android:id="@+id/name_update"
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/text"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
+                    android:inputType="textVisiblePassword"
                     android:layout_marginRight="26dp"
+                    android:maxLines="1"
                     android:background="@drawable/round_bg"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     android:gravity="center"
             />
             <EditText
@@ -91,25 +95,27 @@ android:background="@color/colorPrimary">
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/name_update"
                     android:layout_marginTop="20dp"
+                    android:inputType="textVisiblePassword"
                     android:layout_marginLeft="26dp"
+                    android:maxLines="1"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Location"
+                    android:hint="@string/location"
                     android:gravity="center"
             />
             <EditText
                     android:id="@+id/street_name_update"
+                    android:inputType="textVisiblePassword"
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/location_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
+                    android:maxLines="1"
                     android:background="@drawable/round_bg"
-                    android:hint="Street Name"
+                    android:hint="@string/street_name"
                     android:gravity="center"
             />
             <EditText
@@ -117,14 +123,14 @@ android:background="@color/colorPrimary">
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/street_name_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
+                    android:inputType="textVisiblePassword"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="House Number"
+                    android:hint="@string/house_number"
+                    android:maxLines="1"
                     android:gravity="center"
-                    android:inputType="number"
                     android:ems="10"
             />
             <EditText
@@ -132,12 +138,12 @@ android:background="@color/colorPrimary">
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/house_number_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Postal Code"
+                    android:hint="@string/postal_code"
+                    android:maxLines="1"
                     android:gravity="center"
                     android:inputType="textPostalAddress"
                     android:ems="10"
@@ -147,12 +153,13 @@ android:background="@color/colorPrimary">
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/postal_code_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Town"
+                    android:inputType="textVisiblePassword"
+                    android:hint="@string/town"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <EditText
@@ -160,12 +167,13 @@ android:background="@color/colorPrimary">
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/town_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
+                    android:inputType="textVisiblePassword"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Country"
+                    android:hint="@string/country"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <EditText
@@ -173,12 +181,13 @@ android:background="@color/colorPrimary">
                     android:maxLength="238"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_below="@id/country_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
+                    android:inputType="textVisiblePassword"
                     android:background="@drawable/round_bg"
-                    android:hint="Description"
+                    android:hint="@string/description"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <EditText
@@ -186,12 +195,13 @@ android:background="@color/colorPrimary">
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/description_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
+                    android:inputType="textVisiblePassword"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Telephone"
+                    android:hint="@string/telephone"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <EditText
@@ -199,16 +209,17 @@ android:background="@color/colorPrimary">
                     android:maxLength="36"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/telephone_update"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
+                    android:inputType="textEmailAddress"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="E-Mail"
+                    android:hint="@string/e_mail"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <Button
-                    android:text="Update"
+                    android:text="@string/update"
                     android:layout_width="220dp"
                     android:layout_height="50dp"
                     android:id="@+id/update_button"
@@ -217,18 +228,17 @@ android:background="@color/colorPrimary">
                     android:gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_gravity="center"
-                    android:layout_below="@id/email_update"
                     android:layout_marginBottom="70dp"
             />
         </LinearLayout>
     </ScrollView>
     <android.support.design.widget.BottomNavigationView
-            android:id="@+id/nav_view"
+            android:id="@+id/nav_view_admin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?android:attr/windowBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_nav_menu"/>
+            app:menu="@menu/bottom_nav_menu_admin"/>
 </android.support.constraint.ConstraintLayout>

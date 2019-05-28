@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".CreateActivity"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
     <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -16,6 +17,13 @@
             android:backgroundTint="@color/colorAccent"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp" android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"/>
+    <ProgressBar
+            android:layout_width="95dp"
+            android:layout_height="100dp"
+            android:indeterminate="true"
+            android:id="@+id/progressBar"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="352dp"/>
     <ScrollView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
                     android:text="@string/create"
-                    android:textSize="40dp"
+                    android:textSize="40sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorAccent"
                     android:layout_marginHorizontal="140dp"
@@ -78,54 +86,57 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/text"
+                    android:maxLines="1"
                     android:maxLength="32"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     android:gravity="center"
+                    android:inputType="textVisiblePassword"
             />
             <EditText
                     android:id="@+id/location"
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/name"
+                    android:maxLines="1"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Location"
+                    android:hint="@string/location"
                     android:gravity="center"
+                    android:inputType="textVisiblePassword"
             />
             <EditText
                     android:id="@+id/street_name"
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/location"
+                    android:maxLines="1"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Street Name"
+                    android:hint="@string/street_name"
                     android:gravity="center"
+                    android:inputType="textVisiblePassword"
             />
             <EditText
                     android:id="@+id/house_number"
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/street_name"
+                    android:maxLines="1"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="House Number"
+                    android:hint="@string/house_number"
                     android:gravity="center"
-                    android:inputType="number"
+                    android:inputType="textVisiblePassword"
                     android:ems="10"
             />
             <EditText
@@ -133,12 +144,12 @@
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/house_number"
+                    android:maxLines="1"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Postal Code"
+                    android:hint="@string/postal_code"
                     android:gravity="center"
                     android:inputType="textPostalAddress"
                     android:ems="10"
@@ -146,14 +157,15 @@
             <EditText
                     android:id="@+id/town"
                     android:maxLength="32"
+                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/postal_code"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Town"
+                    android:inputType="textVisiblePassword"
+                    android:hint="@string/town"
                     android:gravity="center"
             />
             <EditText
@@ -161,12 +173,13 @@
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/town"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
+                    android:inputType="textVisiblePassword"
                     android:background="@drawable/round_bg"
-                    android:hint="Country"
+                    android:hint="@string/country"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <EditText
@@ -174,13 +187,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:maxLength="238"
-                    android:layout_below="@id/country"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="26dp"
+                    android:inputType="textVisiblePassword"
                     android:layout_marginRight="26dp"
                     android:padding="5dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Description"
+                    android:hint="@string/description"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <EditText
@@ -188,12 +202,13 @@
                     android:maxLength="32"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/description"
                     android:layout_marginTop="20dp"
+                    android:inputType="textVisiblePassword"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="Telephone"
+                    android:hint="@string/telephone"
+                    android:maxLines="1"
                     android:gravity="center"
             />
             <EditText
@@ -201,16 +216,17 @@
                     android:maxLength="36"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@id/telephone"
                     android:layout_marginTop="20dp"
+                    android:inputType="textEmailAddress"
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="26dp"
                     android:background="@drawable/round_bg"
-                    android:hint="E-Mail"
+                    android:hint="@string/e_mail"
                     android:gravity="center"
+                    android:maxLines="1"
             />
             <Button
-                    android:text="Add"
+                    android:text="@string/add"
                     android:layout_width="220dp"
                     android:layout_height="40dp"
                     android:id="@+id/confirm_entry"
@@ -219,19 +235,19 @@
                     android:gravity="center"
                     android:layout_marginTop="20dp"
                     android:layout_gravity="center"
-                    android:layout_below="@id/email"
                     android:layout_marginBottom="70dp"
             />
         </LinearLayout>
     </ScrollView>
     <android.support.design.widget.BottomNavigationView
-            android:id="@+id/nav_view"
+            android:id="@+id/nav_view_admin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?android:attr/windowBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:visibility="invisible"
             app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/bottom_nav_menu"/>
+            app:menu="@menu/bottom_nav_menu_admin"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -5,11 +5,24 @@
     <string name="title_list">List</string>
     <string name="title_qr_code">QR-Code</string>
     <string name="title_account">Account</string>
+    <string name="admin_users">Users</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_list">ListActivity</string>
     <string name="title_activity_cardview">CardviewActivity</string>
     <string name="facebook_app_id">2178539878848295</string>
     <string name="fb_login_protocol_scheme">fb2178539878848295</string>
     <string name="create">Create</string>
+    <string name="location">Location</string>
+    <string name="street_name">Street Name</string>
+    <string name="house_number">House Number</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="town">Town</string>
+    <string name="country">Country</string>
+    <string name="description">Description</string>
+    <string name="telephone">Telephone</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="add">Add</string>
+    <string name="photo">photo</string>
     <string name="update">Update</string>
+    <string name="name">Name</string>
 </resources>
