@@ -64,6 +64,9 @@ class UpdateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update)
 
+        progressBar.bringToFront()
+        progressBar.visibility = View.INVISIBLE
+
         if (checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
@@ -348,6 +351,7 @@ class UpdateActivity : AppCompatActivity() {
 
         }
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            progressBar.visibility = View.VISIBLE
             val base64 = encoder(photoPath)
             photoUpdate.setTextKeepState(base64)
             photoUpdate.textSize = 0f

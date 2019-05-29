@@ -264,25 +264,6 @@
                       android:id="@+id/map"
                       tools:context=".MapsActivity"
                       android:name="com.google.android.gms.maps.SupportMapFragment"/>
-            <TextView
-                    android:text="Checkins"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_gravity="center"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/tv_checkins"/>
-            <!--<Button android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_checkin"
-                    android:background="@drawable/round_bg"
-                    android:layout_gravity="center"
-                    android:drawableStart="@drawable/ic_iconmonstr_location_16"
-                    android:paddingLeft="15dp"/>-->
-
         </LinearLayout>
     </ScrollView>
     <android.support.design.widget.BottomNavigationView
