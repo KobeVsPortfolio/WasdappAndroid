@@ -17,7 +17,13 @@
             android:backgroundTint="@color/colorAccent"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp" android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"/>
-
+    <ProgressBar
+            android:layout_width="95dp"
+            android:layout_height="100dp"
+            android:indeterminate="true"
+            android:id="@+id/progressBar"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="352dp"/>
     <ScrollView
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import model.User
 import model.WasdappEntry
+import java.lang.Exception
 
 
 class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val context: Context) :
@@ -116,5 +117,5 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
             return BitmapFactory.decodeResource(context.resources, R.drawable.logo_wasdap4)
         }
     }
-}
+    }
 
