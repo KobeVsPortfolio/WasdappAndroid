@@ -31,14 +31,15 @@
 
             <TextView
                     android:id="@+id/update"
-                    android:layout_width="wrap_content"
-                    android:layout_height="70dp"
+                    android:layout_width="174dp"
+                    android:layout_height="68dp"
                     android:text="@string/update"
                     android:textSize="40sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorAccent"
                     android:layout_marginHorizontal="140dp"
                     android:gravity="center"
+                    android:layout_gravity="center"
             />
             <LinearLayout
                     android:orientation="horizontal"

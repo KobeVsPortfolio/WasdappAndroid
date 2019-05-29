@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_checkin_cardview.*
+import kotlinx.android.synthetic.main.activity_create.view.*
 import kotlinx.android.synthetic.main.activity_this_object.*
 import model.User
 import model.WasdappEntry
@@ -108,10 +110,21 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 tv_checkins.text = checkins
             }
+        share.setOnClickListener {
+
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey! I checked-in at " + wasdappobj.name + " on Wasdapp")
+                shareIntent.type = "text/plain"
+
+
+            startActivity(Intent.createChooser(shareIntent,"send to"))
+        }
 
         btn_checkin.setOnClickListener {
             val addedCheckin = HashMap<String, Any>()
-            addedCheckin.put("user", currentUser!!.email!!)
+            addedCheckin.put("user", userCollection.document("${user.email}").get()
+            )
             addedCheckin.put("timestamp", Calendar.getInstance().time)
 
             db.collection("wasdapps/${wasdappobj.id}/checkins").add(addedCheckin).addOnSuccessListener {

@@ -25,13 +25,15 @@
             android:id="@+id/add_new_object_button"
             android:backgroundTint="@color/colorAccent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="732dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"/>
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="580dp" android:layout_marginBottom="116dp"
-                  app:layout_constraintBottom_toBottomOf="@+id/nav_view" tools:layout_editor_absoluteX="-2dp"
-                  android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout android:layout_width="0dp"
+                  android:layout_height="727dp" android:layout_marginBottom="116dp"
+                  app:layout_constraintBottom_toBottomOf="@+id/nav_view"
+                  android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+                  android:id="@+id/linearLayout3" app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintEnd_toEndOf="parent">
         <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -54,8 +56,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp" android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/nav_view" android:layout_marginTop="8dp"
-            />
+            app:layout_constraintBottom_toTopOf="@+id/nav_view"
+    />
     <android.support.design.widget.BottomNavigationView
             android:id="@+id/nav_view"
             android:layout_width="0dp"
