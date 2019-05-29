@@ -49,6 +49,11 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
                     if (user?.role == "admin") {
                         thrashButton.visibility = View.VISIBLE
                     }
+
+            userCollection.document("${currentUser?.email}").get().addOnSuccessListener { document ->
+                val user = document.toObject(User::class.java)
+                if (user?.role == "admin") {
+                    thrashButton.visibility = View.VISIBLE
                 }
             }
 
@@ -87,6 +92,8 @@ class SortsListAdapter(private val list: ArrayList<WasdappEntry>, private val co
 
             }
         }
+            }
+    }
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): SortsListAdapter.ViewHolder {

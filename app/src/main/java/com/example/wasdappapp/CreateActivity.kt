@@ -289,9 +289,10 @@ class CreateActivity : AppCompatActivity() {
             val resizedBitmap = resizeBitmap(it, 512, 512)
             photoImage.setImageBitmap(resizedBitmap)
             progressBar.visibility = View.INVISIBLE
+            val smallerBitmap = resizeBitmap(resizedBitmap, 256, 256)
 
             val byteArrayOutputStream = ByteArrayOutputStream();
-            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            smallerBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             val byteArray = byteArrayOutputStream.toByteArray()
             val encoded = Base64.getEncoder().encodeToString(byteArray)
             photo.setTextKeepState(encoded)

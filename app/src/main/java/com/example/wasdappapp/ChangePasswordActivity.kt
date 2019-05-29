@@ -109,7 +109,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             et_new_password.text.isNotBlank() &&
             et_confirm_password.text.isNotBlank()
         ) {
-            if (et_new_password.text.toString().equals(et_confirm_password.text.toString())) {
+            if (et_new_password.text.toString() == et_confirm_password.text.toString()) {
                 val user = auth.currentUser
                 if (user != null && user.email != null) {
                     val credential = EmailAuthProvider

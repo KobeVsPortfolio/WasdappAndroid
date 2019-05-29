@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private var auth =  FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     private val currentUser = auth.currentUser
     private val userCollection = db.collection("users")
@@ -20,7 +20,6 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-        auth = FirebaseAuth.getInstance()
 
         password.transformationMethod = PasswordTransformationMethod()
         repeatPassword.transformationMethod = PasswordTransformationMethod()
