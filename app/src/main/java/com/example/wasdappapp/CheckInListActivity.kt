@@ -2,9 +2,9 @@ package com.example.wasdappapp
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -13,7 +13,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import data.CheckInAdapter
 import kotlinx.android.synthetic.main.activity_check_in_list.*
 import model.CheckIn
@@ -22,7 +24,6 @@ import model.WasdappEntry
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.util.*
 
 class CheckInListActivity : AppCompatActivity() {
@@ -40,6 +41,8 @@ class CheckInListActivity : AppCompatActivity() {
     val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     private val currentUser = auth.currentUser
+    var next: Query? = null
+    var lastVisible: DocumentSnapshot? = null
     private val userCollection = db.collection("users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,10 +52,22 @@ class CheckInListActivity : AppCompatActivity() {
         val wasdappobj = intent.getParcelableExtra("wasdappobj") as WasdappEntry
 
         val checkInList: ArrayList<CheckIn> = ArrayList()
-        db.collection("wasdapps/${wasdappobj.id}/checkins").get().addOnSuccessListener { task ->
-            for (i in task.documents) {
+
+        val first = db.collection("wasdapps/${wasdappobj.id}/checkins").limit(8)
+
+        first.get()
+            .addOnSuccessListener { task ->
+                if(!task.isEmpty){
+                lastVisible = task.documents[task.size() - 1]
+                next = db.collection("wasdapps/${wasdappobj.id}/checkins")
+                    .startAfter(lastVisible!!)
+                    .limit(5)
+
+            for(i in task.documents) {
                 val checkIn = i.toObject(CheckIn::class.java)
                 checkInList.add(checkIn!!)
+
+            }
                 layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
                 adapter = CheckInAdapter(checkInList, this)
 
@@ -61,6 +76,44 @@ class CheckInListActivity : AppCompatActivity() {
                 adapter!!.notifyDataSetChanged()
             }
         }
+
+        btn_checkin_more.setOnClickListener{
+            next!!.get()
+                .addOnSuccessListener { task ->
+                    if(!task.isEmpty){
+                        //if (task.documents[task.size() - 1].exists()) {
+                        lastVisible = task.documents[task.size() - 1]
+                        next = db.collection("wasdapps/${wasdappobj.id}/checkins")
+                            .startAfter(lastVisible!!)
+                            .limit(5)
+                        for ( i in task.documents!!) {
+                            val checkIn = i.toObject(CheckIn::class.java)
+                            checkInList.add(checkIn!!)
+                        }
+                    } else if(task.isEmpty){
+                        btn_checkin_more.text = "Go to top"
+                    }
+                    rcv_checkins.layoutManager = layoutManager
+                    rcv_checkins.adapter = adapter
+                    adapter!!.notifyDataSetChanged()
+                }
+        }
+
+        btn_checkin_more.visibility = View.GONE
+        rcv_checkins.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if(!rcv_checkins.canScrollVertically(1)){
+                    println("Last item.... ")
+                    btn_checkin_more.visibility = View.VISIBLE
+                }else{
+                    btn_checkin_more.visibility = View.GONE
+                }
+
+            }
+        })
 
         btn_checkin.setOnClickListener {
             val twentyFourAgo = LocalDateTime.now().minusDays(1)

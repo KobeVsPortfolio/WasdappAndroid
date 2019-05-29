@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_checkin_cardview.*
+import kotlinx.android.synthetic.main.activity_create.view.*
 import kotlinx.android.synthetic.main.activity_this_object.*
 import model.CheckIn
 import model.User
@@ -107,7 +109,16 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
         }
 
+        share.setOnClickListener {
 
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey! I checked-in at " + wasdappobj.name + " on Wasdapp")
+            shareIntent.type = "text/plain"
+
+
+            startActivity(Intent.createChooser(shareIntent,"send to"))
+        }
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
