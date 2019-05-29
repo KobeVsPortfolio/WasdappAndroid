@@ -23,11 +23,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_checkin_cardview.*
 import kotlinx.android.synthetic.main.activity_create.view.*
 import kotlinx.android.synthetic.main.activity_this_object.*
+import model.CheckIn
 import model.User
 import model.WasdappEntry
 import java.io.IOException
 import java.lang.Exception
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -101,38 +103,22 @@ class ThisObjectActivity : AppCompatActivity(), OnMapReadyCallback {
             photo_this_object.setImageBitmap(bitmap)
         }
 
-        var checkins: String?= ""
-            db.collection("wasdapps/${wasdappobj.id}/checkins").get().addOnSuccessListener {
-                for(i in it.documents){
-                   checkins += (" " + i["user"] + " checked in at " + i["timestamp"]+ "!!")
-                    println(checkins)
+        btn_checkin.setOnClickListener {
+            val intent = Intent(this, CheckInListActivity::class.java)
+            intent.putExtra("wasdappobj", wasdappobj)
+            startActivity(intent)
+        }
 
-                }
-                tv_checkins.text = checkins
-            }
         share.setOnClickListener {
 
-                val shareIntent = Intent()
-                shareIntent.action = Intent.ACTION_SEND
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey! I checked-in at " + wasdappobj.name + " on Wasdapp")
-                shareIntent.type = "text/plain"
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey! I checked-in at " + wasdappobj.name + " on Wasdapp")
+            shareIntent.type = "text/plain"
 
 
             startActivity(Intent.createChooser(shareIntent,"send to"))
         }
-
-        btn_checkin.setOnClickListener {
-            val addedCheckin = HashMap<String, Any>()
-            addedCheckin.put("user", userCollection.document("${user.email}").get()
-            )
-            addedCheckin.put("timestamp", Calendar.getInstance().time)
-
-            db.collection("wasdapps/${wasdappobj.id}/checkins").add(addedCheckin).addOnSuccessListener {
-                println("write worked")
-            }
-        }
-
-
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment

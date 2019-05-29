@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import data.SortsListAdapter
 import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.activity_list_users.view.*
 import model.User
 import model.WasdappEntry
 
@@ -100,22 +101,23 @@ class ListActivity : AppCompatActivity() {
         val first = db.collection("wasdapps").limit(8)
         first.get()
             .addOnSuccessListener { task ->
+                if(!task.isEmpty) {
+                    lastVisible = task.documents[task.size() - 1]
+                    next = db.collection("wasdapps")
+                        .startAfter(lastVisible!!)
+                        .limit(5)
 
-                lastVisible = task.documents[task.size() - 1]
-                next = db.collection("wasdapps")
-                    .startAfter(lastVisible!!)
-                    .limit(5)
-
-                for (document in task.documents!!) {
-                    sortList.add(document.toObject(WasdappEntry::class.java)!!)
+                    for (document in task.documents!!) {
+                        sortList.add(document.toObject(WasdappEntry::class.java)!!)
+                    }
                 }
-
                 layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
                 adapter = SortsListAdapter(sortList!!, this)
 
                 rcv.layoutManager = layoutManager
                 rcv.adapter = adapter
                 adapter!!.notifyDataSetChanged()
+                progressBar.visibility = View.INVISIBLE
             }
 
         btn_more.setOnClickListener {
