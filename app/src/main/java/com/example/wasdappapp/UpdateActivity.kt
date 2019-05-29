@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -17,8 +18,10 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
@@ -51,6 +54,11 @@ class UpdateActivity : AppCompatActivity() {
 
     lateinit var photoPath: String
     val REQUEST_TAKE_PHOTO = 1
+    val IMAGE_PICK_REQUEST = 2
+    val KEY_IMAGE_URI = "imageUri"
+    private val PERMISSION_REQUEST_CODE: Int = 101
+
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,9 +118,57 @@ class UpdateActivity : AppCompatActivity() {
         }
 
         photoUpdate.setOnClickListener {
-            takePicture()
+            if (checkPermission()) takePicture() else requestPermission()
         }
 
+
+        uploadUpdate.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).also { it.type = "image/*" }
+            startActivityForResult(intent, IMAGE_PICK_REQUEST)
+        }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_IMAGE_URI)) {
+            imageUri = savedInstanceState.getParcelable(KEY_IMAGE_URI) as Uri
+            imageUri?.let { loadAndShowPhoto(it) }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                ) {
+
+                    takePicture()
+
+                } else {
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+
+            else -> {
+
+            }
+        }
+    }
+
+    private fun checkPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA),
+            PERMISSION_REQUEST_CODE
+        )
     }
 
     public override fun onStart() {
@@ -283,6 +339,14 @@ class UpdateActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == IMAGE_PICK_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            imageUri = data.data
+            loadAndShowPhoto(data.data)
+
+
+        }
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             val base64 = encoder(photoPath)
             photoUpdate.setTextKeepState(base64)
@@ -290,6 +354,35 @@ class UpdateActivity : AppCompatActivity() {
             val bitmap = BitmapFactory.decodeFile(photoPath)
             val resizedBitmap = resizeBitmap(bitmap, 512, 512)
             photoUpdateImage.setImageBitmap(resizedBitmap)
+            progressBar.visibility = View.INVISIBLE
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        if (outState != null && imageUri != null) {
+            outState.putParcelable(KEY_IMAGE_URI, imageUri)
+        }
+    }
+
+    private fun loadAndShowPhoto(uri: Uri) {
+        progressBar.visibility = View.VISIBLE
+        load {
+            MediaStore.Images.Media.getBitmap(contentResolver, uri)
+
+        } then {
+            val resizedBitmap = resizeBitmap(it, 512, 512)
+            photoUpdateImage.setImageBitmap(resizedBitmap)
+            progressBar.visibility = View.INVISIBLE
+            val smallerBitmap = resizeBitmap(resizedBitmap, 256, 256)
+
+            val byteArrayOutputStream = ByteArrayOutputStream();
+            smallerBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            val byteArray = byteArrayOutputStream.toByteArray()
+            val encoded = Base64.getEncoder().encodeToString(byteArray)
+            photoUpdate.setTextKeepState(encoded)
+            photoUpdate.textSize = 0f
+
         }
     }
 
